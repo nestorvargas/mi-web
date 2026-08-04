@@ -19,6 +19,10 @@ export default function ChatWidget({ isOpen, onToggle }: Props) {
 
   useEffect(() => {
     if (isOpen) inputRef.current?.focus();
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
   }, [isOpen]);
 
   useEffect(() => {
