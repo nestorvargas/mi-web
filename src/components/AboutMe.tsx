@@ -58,11 +58,15 @@ export default function AboutMe() {
           <div className="cv-contact">
             <a href="https://linkedin.com/in/nestorfabian92" target="_blank" rel="noopener noreferrer">
               <i className="fa-brands fa-linkedin" />
-              linkedin.com/in/nestorfabian92
+              <span>linkedin.com/in/nestorfabian92</span>
             </a>
             <a href="https://github.com/nestorvargas" target="_blank" rel="noopener noreferrer">
               <i className="fa-brands fa-github" />
-              github.com/nestorvargas
+              <span>github.com/nestorvargas</span>
+            </a>
+            <a href="https://wa.me/573024213805" target="_blank" rel="noopener noreferrer">
+              <i className="fa-brands fa-whatsapp" />
+              <span>+57 302 421 3805</span>
             </a>
           </div>
         </div>
