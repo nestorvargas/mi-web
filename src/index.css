@@ -908,6 +908,11 @@ footer a {
   #chat-form {
     padding-bottom: max(0.6rem, env(safe-area-inset-bottom));
   }
+
+  #chat-input {
+    /* iOS Safari auto-zooms on focus if the input's font-size is under 16px */
+    font-size: 16px;
+  }
 }
 
 #chat-panel .chat-header {
