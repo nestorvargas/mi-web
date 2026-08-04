@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Aurora from './components/Aurora';
 import Particles from './components/Particles';
 import Nav from './components/Nav';
 import Hero from './components/Hero';
@@ -14,6 +15,7 @@ export default function App() {
 
   return (
     <>
+      <Aurora />
       <Particles />
       <Nav />
       <main>

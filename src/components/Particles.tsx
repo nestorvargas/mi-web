@@ -5,6 +5,8 @@ type Star = {
   y: number;
   vx: number;
   vy: number;
+  baseVx: number;
+  baseVy: number;
   r: number;
   glow: boolean;
   phase: number;
@@ -13,6 +15,9 @@ type Star = {
 
 const STAR_COLOR = '8, 145, 178';
 const GLOW_COLOR = '45, 212, 191';
+const LINK_COLOR = '45, 212, 191';
+const LINK_DIST = 130;
+const MOUSE_RADIUS = 140;
 
 export default function Particles() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -30,6 +35,8 @@ export default function Particles() {
     let t = 0;
     let animationId = 0;
     let resizeTimer: number;
+    let mouseX = -9999;
+    let mouseY = -9999;
 
     function sizeCanvas() {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -43,17 +50,21 @@ export default function Particles() {
     }
 
     function makeStars() {
-      const starCount = Math.min(220, Math.round((width * Math.min(height, window.innerHeight * 1.4)) / 9000));
+      const starCount = Math.min(150, Math.round((width * Math.min(height, window.innerHeight * 1.4)) / 11000));
       const drawHeight = Math.min(height, window.innerHeight * 1.4);
       stars = [];
       for (let i = 0; i < starCount; i++) {
-        const big = Math.random() < 0.12;
+        const big = Math.random() < 0.14;
+        const vx = (Math.random() - 0.5) * 0.06;
+        const vy = (Math.random() - 0.5) * 0.06;
         stars.push({
           x: Math.random() * width,
           y: Math.random() * drawHeight,
-          vx: (Math.random() - 0.5) * 0.06,
-          vy: (Math.random() - 0.5) * 0.06,
-          r: big ? Math.random() * 1.1 + 1.3 : Math.random() * 0.9 + 0.4,
+          vx,
+          vy,
+          baseVx: vx,
+          baseVy: vy,
+          r: big ? Math.random() * 1.2 + 1.4 : Math.random() * 0.9 + 0.4,
           glow: big,
           phase: Math.random() * Math.PI * 2,
           speed: Math.random() * 0.015 + 0.006,
@@ -66,6 +77,19 @@ export default function Particles() {
       t += 1;
 
       for (const s of stars) {
+        const dxMouse = s.x - mouseX;
+        const dyMouse = s.y - mouseY;
+        const distMouse = Math.hypot(dxMouse, dyMouse);
+
+        if (distMouse < MOUSE_RADIUS) {
+          const force = (1 - distMouse / MOUSE_RADIUS) * 0.4;
+          s.vx += (dxMouse / (distMouse || 1)) * force;
+          s.vy += (dyMouse / (distMouse || 1)) * force;
+        }
+
+        s.vx += (s.baseVx - s.vx) * 0.02;
+        s.vy += (s.baseVy - s.vy) * 0.02;
+
         s.x += s.vx;
         s.y += s.vy;
         if (s.x < 0) s.x = width;
@@ -91,6 +115,22 @@ export default function Particles() {
         ctx!.fill();
       }
 
+      for (let a = 0; a < stars.length; a++) {
+        for (let b = a + 1; b < stars.length; b++) {
+          const dx = stars[a].x - stars[b].x;
+          const dy = stars[a].y - stars[b].y;
+          const dist = Math.hypot(dx, dy);
+          if (dist < LINK_DIST) {
+            ctx!.beginPath();
+            ctx!.moveTo(stars[a].x, stars[a].y);
+            ctx!.lineTo(stars[b].x, stars[b].y);
+            ctx!.strokeStyle = `rgba(${LINK_COLOR}, ${0.22 * (1 - dist / LINK_DIST)})`;
+            ctx!.lineWidth = 1;
+            ctx!.stroke();
+          }
+        }
+      }
+
       if (!prefersReducedMotion) animationId = requestAnimationFrame(step);
     }
 
@@ -109,17 +149,33 @@ export default function Particles() {
       }
     }
 
+    function handleMouseMove(e: MouseEvent) {
+      mouseX = e.clientX;
+      mouseY = e.clientY + window.scrollY;
+    }
+
+    function handleMouseLeave() {
+      mouseX = -9999;
+      mouseY = -9999;
+    }
+
     sizeCanvas();
     makeStars();
     step();
 
     window.addEventListener('resize', handleResize);
     document.addEventListener('visibilitychange', handleVisibility);
+    if (!prefersReducedMotion) {
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseleave', handleMouseLeave);
+    }
 
     return () => {
       window.clearTimeout(resizeTimer);
       window.removeEventListener('resize', handleResize);
       document.removeEventListener('visibilitychange', handleVisibility);
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseleave', handleMouseLeave);
       cancelAnimationFrame(animationId);
     };
   }, []);
