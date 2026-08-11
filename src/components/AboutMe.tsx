@@ -15,7 +15,6 @@ const skills = [
   'DevOps',
   'CI/CD',
   'Linux',
-  'Nginx',
   'n8n',
   'Strapi',
 ];

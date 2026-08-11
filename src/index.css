@@ -241,6 +241,7 @@ section {
 .portfolio-grid .portfolio-item:nth-child(2) { transition-delay: 0.15s; }
 .portfolio-grid .portfolio-item:nth-child(3) { transition-delay: 0.25s; }
 .portfolio-grid .portfolio-item:nth-child(4) { transition-delay: 0.35s; }
+.portfolio-grid .portfolio-item:nth-child(5) { transition-delay: 0.45s; }
 .cv-skills .cv-skill:nth-child(1) { transition-delay: 0.02s; }
 .cv-skills .cv-skill:nth-child(2) { transition-delay: 0.06s; }
 .cv-skills .cv-skill:nth-child(3) { transition-delay: 0.1s; }
@@ -262,7 +263,7 @@ section {
 }
 
 .section-inner {
-  max-width: 760px;
+  max-width: 1080px;
   margin: 0 auto;
 }
 
@@ -543,18 +544,25 @@ h1 {
 /* Servicios cards */
 .cards {
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 0.9rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+@media (max-width: 760px) {
+  .cards {
+    grid-template-columns: 1fr;
+  }
 }
 
 a.card {
   position: relative;
   overflow: hidden;
   display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1.1rem 1.25rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.9rem;
+  padding: 1.5rem;
   border-radius: 1.1rem;
   background: var(--card-bg);
   border: 1px solid var(--card-border);
@@ -579,8 +587,7 @@ a.card:hover::before {
 }
 
 a.card .card-icon,
-a.card .card-body,
-a.card .card-arrow {
+a.card .card-body {
   position: relative;
   z-index: 1;
 }
@@ -634,9 +641,19 @@ a.card:hover {
 }
 
 .card-arrow {
-  flex-shrink: 0;
+  position: absolute;
+  z-index: 1;
+  top: 1.25rem;
+  right: 1.25rem;
   color: var(--text-muted);
-  opacity: 0.6;
+  opacity: 0.5;
+  font-size: 0.8rem;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+a.card:hover .card-arrow {
+  opacity: 1;
+  transform: translate(2px, -2px);
 }
 
 /* Portfolio */
@@ -644,6 +661,10 @@ a.card:hover {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
+}
+
+.portfolio-item:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
 }
 
 @media (max-width: 640px) {
@@ -935,7 +956,7 @@ footer a {
 }
 
 .footer-inner {
-  max-width: 760px;
+  max-width: 1080px;
   margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
@@ -1003,7 +1024,7 @@ footer a {
 }
 
 .footer-bottom {
-  max-width: 760px;
+  max-width: 1080px;
   margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
@@ -1278,6 +1299,8 @@ footer a {
 
 /* Terminal */
 .term-window {
+  max-width: 720px;
+  margin: 0 auto;
   background: #0a0a0c;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 1rem;
@@ -1320,8 +1343,10 @@ footer a {
 
 .term-body {
   padding: 1.1rem 1.2rem 1.3rem;
-  max-height: 380px;
+  max-height: 420px;
   overflow-y: auto;
+  overscroll-behavior: contain;
+  scroll-behavior: smooth;
   font-family: "SF Mono", "Fira Code", Consolas, Menlo, monospace;
   font-size: 0.82rem;
   line-height: 1.7;

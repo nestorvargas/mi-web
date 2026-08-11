@@ -1,6 +1,6 @@
 import { useReveal } from '../hooks/useReveal';
 
-const stack = ['Ubuntu Server', 'Docker', 'Ollama', 'n8n', 'NestJS', 'Next.js', 'Nginx', 'Tailscale', 'Coolify'];
+const stack = ['Ubuntu Server', 'Docker', 'Ollama', 'n8n', 'NestJS', 'Next.js', 'Tailscale', 'Coolify'];
 const loop = [...stack, ...stack];
 
 export default function Stack() {

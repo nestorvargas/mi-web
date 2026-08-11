@@ -25,16 +25,16 @@ const SKILLS = [
   'DevOps',
   'CI/CD',
   'Linux',
-  'Nginx',
   'n8n',
   'Strapi',
 ];
 
 const PROJECTS = [
+  { title: 'Desarrollo de portales & apps web', desc: 'Sitios corporativos, portales de gestión, apps a medida — frontend a despliegue.' },
+  { title: 'Arquitectura Full Stack', desc: 'APIs con NestJS, frontends Next.js/Angular/React, SQL y NoSQL.' },
   { title: 'Seguridad & hardening', desc: 'TLS, headers de seguridad, firewall, mínimo privilegio en accesos.' },
   { title: 'CI/CD & deploys', desc: 'Docker y Coolify, integración con GitHub, entornos reproducibles.' },
   { title: 'Automatización con IA', desc: 'Workflows con n8n, agentes sobre Ollama y RAG con base propia.' },
-  { title: 'Arquitectura Full Stack', desc: 'APIs con NestJS, frontends Next.js/Angular/React, SQL y NoSQL.' },
 ];
 
 const HELP_LINES = [
@@ -56,7 +56,7 @@ function Whoami() {
       <p>
         Especializado en Node.js, NestJS, Angular y TypeScript. Este mismo servidor (donde estás
         parado ahora) es un proyecto personal para explorar IA self-hosted de punta a punta: Docker,
-        Ollama, n8n y Nginx corriendo en un NUC en casa.
+        Ollama y n8n corriendo en un servidor propio.
       </p>
       <p className="term-muted">Escribí "help" para ver más comandos.</p>
     </>
@@ -70,6 +70,7 @@ function Skills() {
 function Projects() {
   return (
     <>
+      <p>Soy Desarrollador Full Stack. Estos son los pilares en los que trabajo:</p>
       {PROJECTS.map((p, i) => (
         <p key={p.title}>
           <span className="term-accent">{String(i + 1).padStart(2, '0')}.</span> <strong>{p.title}</strong>{' '}
@@ -135,9 +136,7 @@ export default function Terminal() {
   const nextId = useRef(0);
 
   useEffect(() => {
-    if (bodyRef.current) {
-      bodyRef.current.scrollTop = bodyRef.current.scrollHeight;
-    }
+    bodyRef.current?.scrollTo({ top: bodyRef.current.scrollHeight, behavior: 'smooth' });
   }, [lines]);
 
   function run(raw: string) {

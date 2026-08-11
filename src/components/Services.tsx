@@ -11,14 +11,14 @@ type Service = {
 
 const services: Service[] = [
   {
-    href: 'https://server-ia.tail30c2a0.ts.net:8443',
+    href: 'https://webui.nestordevelop.online',
     icon: 'fa-robot',
     iconClass: 'openwebui',
     title: 'Open WebUI',
     desc: 'Chat directo con los modelos de Ollama instalados en el servidor.',
   },
   {
-    href: 'https://server-ia.tail30c2a0.ts.net:10000',
+    href: 'https://chat.nestordevelop.online',
     icon: 'fa-comment-dots',
     iconClass: 'chatbot',
     title: 'Chatbot IA',
@@ -55,6 +55,7 @@ export default function Services() {
               rel="noopener noreferrer"
               onMouseMove={onMouseMove}
             >
+              <i className="fa-solid fa-arrow-up-right-from-square card-arrow" />
               <div className={`card-icon ${s.iconClass}`}>
                 <i className={`fa-solid ${s.icon}`} />
               </div>
@@ -62,7 +63,6 @@ export default function Services() {
                 <p className="card-title">{s.title}</p>
                 <p className="card-desc">{s.desc}</p>
               </div>
-              <i className="fa-solid fa-arrow-up-right-from-square card-arrow" />
             </a>
           ))}
         </div>
