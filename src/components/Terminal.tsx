@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { KeyboardEvent, ReactNode } from 'react';
 import { useReveal } from '../hooks/useReveal';
+import { experience } from '../data/experience';
 
 const SECTIONS: Record<string, string> = {
   hero: 'hero',
@@ -40,6 +41,7 @@ const HELP_LINES = [
   ['whoami', 'Quién soy'],
   ['skills', 'Habilidades técnicas'],
   ['projects', 'En qué trabajo'],
+  ['experience', 'Experiencia laboral'],
   ['contact', 'Cómo contactarme'],
   ['scroll <sección>', 'Navegar a una sección de la web'],
   ['clear', 'Limpiar la terminal'],
@@ -75,6 +77,22 @@ function Projects() {
         <p key={p.title}>
           <span className="term-accent">{String(i + 1).padStart(2, '0')}.</span> <strong>{p.title}</strong>{' '}
           — {p.desc}
+        </p>
+      ))}
+    </>
+  );
+}
+
+function Experience() {
+  return (
+    <>
+      <p>Experiencia laboral (más reciente primero):</p>
+      {experience.map((job) => (
+        <p key={job.company}>
+          <span className="term-accent">{job.period.padEnd(20, ' ')}</span>
+          <strong>{job.company}</strong> — {job.role}
+          <br />
+          <span className="term-muted">&nbsp;&nbsp;&nbsp;&nbsp;{job.stack.join(', ')}</span>
         </p>
       ))}
     </>
@@ -159,6 +177,9 @@ export default function Terminal() {
         break;
       case 'projects':
         content = <Projects />;
+        break;
+      case 'experience':
+        content = <Experience />;
         break;
       case 'contact':
         content = <Contact />;
