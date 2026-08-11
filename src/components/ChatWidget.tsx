@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { ChangeEvent, FormEvent, KeyboardEvent } from 'react';
 
-const API_URL = 'https://server-ia.tail30c2a0.ts.net:10000/api/chat';
+const API_URL = 'https://chat.nestordevelop.online/api/chat';
 
 type Message = { role: 'user' | 'assistant'; content: string };
 
