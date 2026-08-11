@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>404 — Página no encontrada | Nestor Vargas</title>
+    <meta name="robots" content="noindex, follow" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #f4f4f5;
+        --bg-grad-a: #eef2ff;
+        --bg-grad-b: #f4f4f5;
+        --card-border: rgba(24, 24, 27, 0.08);
+        --text: #18181b;
+        --text-muted: #71717a;
+        --accent-a: #2dd4bf;
+        --accent-b: #0891b2;
+        --font-display: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #09090b;
+          --bg-grad-a: #0c0c14;
+          --bg-grad-b: #09090b;
+          --card-border: rgba(255, 255, 255, 0.08);
+          --text: #f4f4f5;
+          --text-muted: #a1a1aa;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: radial-gradient(circle at 50% -10%, var(--bg-grad-a), var(--bg-grad-b) 60%);
+        color: var(--text);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
+      main {
+        text-align: center;
+        padding: 2rem;
+        max-width: 420px;
+      }
+      .logo {
+        width: 56px;
+        height: 56px;
+        margin: 0 auto 1.75rem;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 1.1rem;
+        color: white;
+        background: linear-gradient(135deg, var(--accent-a), var(--accent-b));
+        box-shadow: 0 10px 24px rgba(8, 145, 178, 0.25);
+      }
+      .code {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(3.5rem, 12vw, 5.5rem);
+        line-height: 1;
+        margin: 0;
+        background: linear-gradient(100deg, var(--text) 20%, var(--accent-b) 40%, var(--accent-a) 50%, var(--text) 70%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      h1 {
+        font-family: var(--font-display);
+        font-size: 1.15rem;
+        font-weight: 600;
+        margin: 0.75rem 0 0.5rem;
+      }
+      p {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        line-height: 1.6;
+        margin: 0 0 1.75rem;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.7rem 1.4rem;
+        border-radius: 999px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-decoration: none;
+        color: white;
+        background: linear-gradient(135deg, var(--accent-a), var(--accent-b));
+        box-shadow: 0 10px 24px rgba(8, 145, 178, 0.25);
+        transition: transform 0.15s ease;
+      }
+      .btn:hover {
+        transform: translateY(-1px);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="logo">IA</div>
+      <p class="code">404</p>
+      <h1>Página no encontrada</h1>
+      <p>La página que busca no existe o se movió de lugar.</p>
+      <a class="btn" href="/">← Volver al inicio</a>
+    </main>
+  </body>
+</html>
