@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import type { ChangeEvent, FormEvent, KeyboardEvent } from 'react';
 
 const API_URL = 'https://chat.nestordevelop.online/api/chat';
+const CHAT_APP_URL = 'https://chat.nestordevelop.online';
+const MOBILE_QUERY = '(max-width: 640px)';
 
 type Message = { role: 'user' | 'assistant'; content: string };
 
@@ -80,13 +82,21 @@ export default function ChatWidget({ isOpen, onToggle }: Props) {
     sendMessage();
   }
 
+  function handleLauncherClick() {
+    if (window.matchMedia(MOBILE_QUERY).matches) {
+      window.location.href = CHAT_APP_URL;
+      return;
+    }
+    onToggle();
+  }
+
   return (
     <>
       <button
         id="chat-launcher"
         aria-label={isOpen ? 'Cerrar chat' : 'Abrir chat'}
         className={isOpen ? 'open' : undefined}
-        onClick={onToggle}
+        onClick={handleLauncherClick}
       >
         <i className="fa-solid fa-comment-dots icon-chat" />
         <i className="fa-solid fa-xmark icon-close" />
