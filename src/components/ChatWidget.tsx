@@ -2,8 +2,13 @@ import { useEffect, useRef, useState } from 'react';
 import type { ChangeEvent, FormEvent, KeyboardEvent } from 'react';
 
 const API_URL = 'https://chat.nestordevelop.online/api/chat';
-const CHAT_APP_URL = 'https://chat.nestordevelop.online';
-const MOBILE_QUERY = '(max-width: 640px)';
+
+const SUGGESTED_PROMPTS = [
+  '¿Qué proyectos hizo Nestor?',
+  '¿Tiene experiencia con PHP?',
+  '¿Cuáles son sus skills?',
+  '¿Cómo lo contacto?',
+];
 
 type Message = { role: 'user' | 'assistant'; content: string };
 
@@ -47,8 +52,8 @@ export default function ChatWidget({ isOpen, onToggle }: Props) {
     }
   }
 
-  async function sendMessage() {
-    const text = input.trim();
+  async function sendMessage(overrideText?: string) {
+    const text = overrideText ?? input.trim();
     if (!text || loading) return;
 
     const nextHistory: Message[] = [...history, { role: 'user', content: text }];
@@ -82,21 +87,14 @@ export default function ChatWidget({ isOpen, onToggle }: Props) {
     sendMessage();
   }
 
-  function handleLauncherClick() {
-    if (window.matchMedia(MOBILE_QUERY).matches) {
-      window.location.href = CHAT_APP_URL;
-      return;
-    }
-    onToggle();
-  }
-
   return (
     <>
       <button
         id="chat-launcher"
+        type="button"
         aria-label={isOpen ? 'Cerrar chat' : 'Abrir chat'}
         className={isOpen ? 'open' : undefined}
-        onClick={handleLauncherClick}
+        onClick={onToggle}
       >
         <i className="fa-solid fa-comment-dots icon-chat" />
         <i className="fa-solid fa-xmark icon-close" />
@@ -112,9 +110,36 @@ export default function ChatWidget({ isOpen, onToggle }: Props) {
               En línea
             </div>
           </div>
+          <button
+            id="chat-header-close"
+            type="button"
+            aria-label="Cerrar chat"
+            onClick={onToggle}
+          >
+            <i className="fa-solid fa-xmark" />
+          </button>
         </div>
 
         <div id="chat-messages" ref={messagesRef}>
+          {history.length === 0 && (
+            <div id="chat-empty-state">
+              <div className="chat-empty-icon">IA</div>
+              <p className="chat-empty-title">¿En qué te puedo ayudar?</p>
+              <p className="chat-empty-subtitle">Preguntame sobre la experiencia de Nestor, o elegí una opción:</p>
+              <div className="chat-suggested-prompts">
+                {SUGGESTED_PROMPTS.map((prompt) => (
+                  <button
+                    key={prompt}
+                    type="button"
+                    className="chat-prompt-chip"
+                    onClick={() => sendMessage(prompt)}
+                  >
+                    {prompt}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
           {history.map((m, i) => (
             <div key={i} className={`msg-row ${m.role === 'user' ? 'user' : 'bot'}`}>
               <div className={`msg-avatar ${m.role === 'user' ? 'user' : 'bot'}`}>

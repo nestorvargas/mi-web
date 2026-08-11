@@ -1107,6 +1107,25 @@ footer a {
   display: flex;
 }
 
+#chat-header-close {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  margin-left: auto;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+#chat-header-close:hover {
+  background: var(--bg);
+  color: var(--text);
+}
+
 @media (max-width: 640px) {
   #chat-panel {
     right: 0;
@@ -1134,6 +1153,26 @@ footer a {
   #chat-input {
     /* iOS Safari auto-zooms on focus if the input's font-size is under 16px */
     font-size: 16px;
+  }
+
+  /* Fullscreen panel already has its own close button in the header;
+     hiding the floating launcher while open avoids it sitting on top of
+     the send button, since both anchor to the same bottom-right corner. */
+  #chat-launcher.open {
+    display: none;
+  }
+
+  #chat-header-close {
+    display: flex;
+  }
+
+  #chat-send {
+    width: 42px;
+    height: 42px;
+  }
+
+  .msg-bubble {
+    font-size: 0.92rem;
   }
 }
 
@@ -1177,6 +1216,62 @@ footer a {
   flex-direction: column;
   gap: 0.7rem;
   scrollbar-width: thin;
+}
+
+#chat-empty-state {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 1.5rem 1rem;
+  text-align: center;
+}
+.chat-empty-icon {
+  width: 44px;
+  height: 44px;
+  margin-bottom: 0.4rem;
+  border-radius: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(135deg, var(--accent-a), var(--accent-b));
+  box-shadow: 0 10px 24px rgba(8, 145, 178, 0.25);
+}
+.chat-empty-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.chat-empty-subtitle {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+.chat-suggested-prompts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+}
+.chat-prompt-chip {
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 500;
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+.chat-prompt-chip:hover {
+  border-color: color-mix(in srgb, var(--accent-b) 40%, transparent);
+  background: color-mix(in srgb, var(--accent-b) 8%, transparent);
+  color: var(--accent-b);
 }
 
 .msg-row {
