@@ -16,6 +16,7 @@ export default function Hero({ onOpenChat }: Props) {
         <p>
           Desarrollo de aplicaciones web con tecnologías modernas y prácticas, integrando
           inteligencia artificial en soluciones digitales.
+          <span className="hero-cursor" aria-hidden="true" />
         </p>
         <div className="hero-actions">
           <button className="btn btn-primary" type="button" onClick={onOpenChat}>
@@ -40,6 +41,10 @@ export default function Hero({ onOpenChat }: Props) {
           </div>
         </div>
       </div>
+      <a className="scroll-cue" href="#servicios" aria-label="Bajar a la sección de servicios">
+        <span />
+        <i className="fa-solid fa-chevron-down" />
+      </a>
     </section>
   );
 }

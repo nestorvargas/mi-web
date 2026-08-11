@@ -50,8 +50,8 @@ export default function Particles() {
     }
 
     function makeStars() {
-      const starCount = Math.min(150, Math.round((width * Math.min(height, window.innerHeight * 1.4)) / 11000));
-      const drawHeight = Math.min(height, window.innerHeight * 1.4);
+      const drawHeight = height;
+      const starCount = Math.min(260, Math.round((width * drawHeight) / 11000));
       stars = [];
       for (let i = 0; i < starCount; i++) {
         const big = Math.random() < 0.14;

@@ -6,6 +6,7 @@ import Hero from './components/Hero';
 import Services from './components/Services';
 import Stack from './components/Stack';
 import Portfolio from './components/Portfolio';
+import Terminal from './components/Terminal';
 import AboutMe from './components/AboutMe';
 import Footer from './components/Footer';
 import ChatWidget from './components/ChatWidget';
@@ -23,6 +24,7 @@ export default function App() {
         <Services />
         <Stack />
         <Portfolio />
+        <Terminal />
         <AboutMe />
       </main>
       <Footer />

@@ -16,6 +16,9 @@ export default function Nav() {
           <a href="#portfolio">Portfolio</a>
         </li>
         <li>
+          <a href="#terminal">Consola</a>
+        </li>
+        <li>
           <a href="#sobre-mi">Sobre mí</a>
         </li>
       </ul>
