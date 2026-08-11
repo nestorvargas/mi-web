@@ -1,22 +1,5 @@
 import { useReveal } from '../hooks/useReveal';
-
-const skills = [
-  'PHP',
-  'Drupal',
-  'Laravel',
-  'Node.js',
-  'Java Spring Boot',
-  'Python',
-  'FastAPI',
-  'MySQL',
-  'PostgreSQL',
-  'Redis',
-  'MongoDB',
-  'Docker',
-  'CI/CD',
-  'Linux',
-  'n8n',
-];
+import { skills } from '../data/capabilities';
 
 export default function AboutMe() {
   const { ref, visible } = useReveal<HTMLElement>();

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { KeyboardEvent, ReactNode } from 'react';
 import { useReveal } from '../hooks/useReveal';
 import { experience } from '../data/experience';
+import { capabilities, skills as SKILLS } from '../data/capabilities';
 
 const SECTIONS: Record<string, string> = {
   hero: 'hero',
@@ -11,31 +12,7 @@ const SECTIONS: Record<string, string> = {
   'sobre-mi': 'sobre-mi',
 };
 
-const SKILLS = [
-  'PHP',
-  'Drupal',
-  'Laravel',
-  'Node.js',
-  'Java Spring Boot',
-  'Python',
-  'FastAPI',
-  'MySQL',
-  'PostgreSQL',
-  'Redis',
-  'MongoDB',
-  'Docker',
-  'CI/CD',
-  'Linux',
-  'n8n',
-];
-
-const PROJECTS = [
-  { title: 'Desarrollo de portales & apps web', desc: 'Sitios corporativos, portales de gestión, apps a medida — frontend a despliegue.' },
-  { title: 'Arquitectura Backend / Full Stack', desc: 'APIs con PHP (Drupal, Laravel), Node.js y Java Spring Boot, SQL y NoSQL.' },
-  { title: 'Seguridad & hardening', desc: 'TLS, headers de seguridad, firewall, mínimo privilegio en accesos.' },
-  { title: 'CI/CD & deploys', desc: 'Docker y Coolify, integración con GitHub, entornos reproducibles.' },
-  { title: 'Automatización con IA', desc: 'Workflows con n8n, agentes sobre Ollama y RAG con base propia.' },
-];
+const PROJECTS = capabilities;
 
 const HELP_LINES = [
   ['whoami', 'Quién soy'],

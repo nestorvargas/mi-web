@@ -10,6 +10,17 @@ const SUGGESTED_PROMPTS = [
   '¿Cómo lo contacto?',
 ];
 
+const MOBILE_QUERY = '(max-width: 640px)';
+
+// Auto-focusing the input pops the mobile keyboard immediately and the
+// browser scrolls/zooms to keep it in view, which hides the header and
+// message list right as the panel opens — it stops looking like a chat
+// window and looks like a zoomed-in text field. Skip autofocus on mobile;
+// desktop keeps it since there's no keyboard/zoom to fight there.
+function isMobileViewport() {
+  return typeof window !== 'undefined' && window.matchMedia(MOBILE_QUERY).matches;
+}
+
 type Message = { role: 'user' | 'assistant'; content: string };
 
 // Minimal markdown renderer for what the model actually produces: **bold**,
@@ -107,7 +118,7 @@ export default function ChatWidget({ isOpen, onToggle }: Props) {
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    if (isOpen) inputRef.current?.focus();
+    if (isOpen && !isMobileViewport()) inputRef.current?.focus();
     document.body.style.overflow = isOpen ? 'hidden' : '';
     return () => {
       document.body.style.overflow = '';
@@ -160,7 +171,7 @@ export default function ChatWidget({ isOpen, onToggle }: Props) {
       ]);
     } finally {
       setLoading(false);
-      inputRef.current?.focus();
+      if (!isMobileViewport()) inputRef.current?.focus();
     }
   }
 
