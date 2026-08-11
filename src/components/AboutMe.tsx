@@ -1,22 +1,21 @@
 import { useReveal } from '../hooks/useReveal';
 
 const skills = [
-  'Angular',
-  'React',
-  'Node.js',
-  'NestJS',
-  'TypeScript',
   'PHP',
   'Drupal',
+  'Laravel',
+  'Node.js',
+  'Java Spring Boot',
+  'Python',
+  'FastAPI',
   'MySQL',
-  'MongoDB',
   'PostgreSQL',
+  'Redis',
+  'MongoDB',
   'Docker',
-  'DevOps',
   'CI/CD',
   'Linux',
   'n8n',
-  'Strapi',
 ];
 
 export default function AboutMe() {
@@ -39,7 +38,8 @@ export default function AboutMe() {
           </div>
 
           <p className="cv-bio">
-            Desarrollador Full Stack especializado en Node.js, NestJS, Angular y TypeScript. Este
+            Desarrollador Backend / Full Stack Senior con más de 10 años de experiencia. Especialista
+            en PHP (Drupal, Laravel), con también Node.js, Java Spring Boot y Python (FastAPI). Este
             servidor es un proyecto personal para explorar IA self-hosted de punta a punta.
           </p>
 

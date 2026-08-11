@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import type { ChangeEvent, FormEvent, KeyboardEvent } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
+import type { ChangeEvent, FormEvent, KeyboardEvent, ReactNode } from 'react';
 
 const API_URL = 'https://chat.nestordevelop.online/api/chat';
 
@@ -11,6 +11,88 @@ const SUGGESTED_PROMPTS = [
 ];
 
 type Message = { role: 'user' | 'assistant'; content: string };
+
+// Minimal markdown renderer for what the model actually produces: **bold**,
+// "- " / "1. " lists, and paragraphs. Avoids pulling in react-markdown for
+// this narrow subset.
+function renderInline(text: string): ReactNode[] {
+  const pattern = /(\*\*[^*]+\*\*|\[[^\]]+\]\([^)]+\))/g;
+  return text.split(pattern).map((part, i) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return <strong key={i}>{part.slice(2, -2)}</strong>;
+    }
+    const link = /^\[([^\]]+)\]\(([^)]+)\)$/.exec(part);
+    if (link) {
+      return (
+        <a key={i} href={link[2]} target="_blank" rel="noopener noreferrer">
+          {link[1]}
+        </a>
+      );
+    }
+    return <Fragment key={i}>{part}</Fragment>;
+  });
+}
+
+function renderMarkdown(text: string): ReactNode[] {
+  const lines = text.split('\n');
+  const blocks: ReactNode[] = [];
+  let i = 0;
+
+  while (i < lines.length) {
+    const line = lines[i];
+    if (/^\s*[-*]\s+/.test(line)) {
+      const items: string[] = [];
+      while (i < lines.length && /^\s*[-*]\s+/.test(lines[i])) {
+        items.push(lines[i].replace(/^\s*[-*]\s+/, ''));
+        i++;
+      }
+      blocks.push(
+        <ul key={blocks.length}>
+          {items.map((it, idx) => (
+            <li key={idx}>{renderInline(it)}</li>
+          ))}
+        </ul>,
+      );
+      continue;
+    }
+    if (/^\s*\d+\.\s+/.test(line)) {
+      const items: string[] = [];
+      while (i < lines.length && /^\s*\d+\.\s+/.test(lines[i])) {
+        items.push(lines[i].replace(/^\s*\d+\.\s+/, ''));
+        i++;
+      }
+      blocks.push(
+        <ol key={blocks.length}>
+          {items.map((it, idx) => (
+            <li key={idx}>{renderInline(it)}</li>
+          ))}
+        </ol>,
+      );
+      continue;
+    }
+    if (line.trim() === '') {
+      i++;
+      continue;
+    }
+    const paraLines: string[] = [];
+    while (i < lines.length && lines[i].trim() !== '' && !/^\s*[-*]\s+/.test(lines[i]) && !/^\s*\d+\.\s+/.test(lines[i])) {
+      paraLines.push(lines[i]);
+      i++;
+    }
+    blocks.push(
+      <p key={blocks.length}>
+        {paraLines.map((pl, idx) => (
+          <Fragment key={idx}>
+            {idx > 0 && <br />}
+            {renderInline(pl)}
+          </Fragment>
+        ))}
+      </p>,
+    );
+  }
+
+  return blocks;
+}
 
 type Props = {
   isOpen: boolean;
@@ -74,7 +156,7 @@ export default function ChatWidget({ isOpen, onToggle }: Props) {
     } catch {
       setHistory((prev) => [
         ...prev,
-        { role: 'assistant', content: 'Uy, hubo un error de conexión. Probá de nuevo en un momento.' },
+        { role: 'assistant', content: 'Hubo un error de conexión. Intente de nuevo en un momento.' },
       ]);
     } finally {
       setLoading(false);
@@ -124,8 +206,8 @@ export default function ChatWidget({ isOpen, onToggle }: Props) {
           {history.length === 0 && (
             <div id="chat-empty-state">
               <div className="chat-empty-icon">IA</div>
-              <p className="chat-empty-title">¿En qué te puedo ayudar?</p>
-              <p className="chat-empty-subtitle">Preguntame sobre la experiencia de Nestor, o elegí una opción:</p>
+              <p className="chat-empty-title">¿En qué le puedo ayudar?</p>
+              <p className="chat-empty-subtitle">Pregunte sobre la experiencia de Nestor, o elija una opción:</p>
               <div className="chat-suggested-prompts">
                 {SUGGESTED_PROMPTS.map((prompt) => (
                   <button
@@ -145,7 +227,7 @@ export default function ChatWidget({ isOpen, onToggle }: Props) {
               <div className={`msg-avatar ${m.role === 'user' ? 'user' : 'bot'}`}>
                 {m.role === 'user' ? '' : 'IA'}
               </div>
-              <div className="msg-bubble">{m.content}</div>
+              <div className="msg-bubble">{m.role === 'user' ? m.content : renderMarkdown(m.content)}</div>
             </div>
           ))}
           {loading && (
@@ -180,7 +262,7 @@ export default function ChatWidget({ isOpen, onToggle }: Props) {
             id="chat-input"
             ref={inputRef}
             rows={1}
-            placeholder="Escribí tu mensaje..."
+            placeholder="Escriba su mensaje..."
             value={input}
             onChange={handleInput}
             onKeyDown={handleKeyDown}

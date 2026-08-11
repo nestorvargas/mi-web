@@ -11,27 +11,26 @@ const SECTIONS: Record<string, string> = {
 };
 
 const SKILLS = [
-  'Angular',
-  'React',
-  'Node.js',
-  'NestJS',
-  'TypeScript',
   'PHP',
   'Drupal',
+  'Laravel',
+  'Node.js',
+  'Java Spring Boot',
+  'Python',
+  'FastAPI',
   'MySQL',
-  'MongoDB',
   'PostgreSQL',
+  'Redis',
+  'MongoDB',
   'Docker',
-  'DevOps',
   'CI/CD',
   'Linux',
   'n8n',
-  'Strapi',
 ];
 
 const PROJECTS = [
   { title: 'Desarrollo de portales & apps web', desc: 'Sitios corporativos, portales de gestión, apps a medida — frontend a despliegue.' },
-  { title: 'Arquitectura Full Stack', desc: 'APIs con NestJS, frontends Next.js/Angular/React, SQL y NoSQL.' },
+  { title: 'Arquitectura Backend / Full Stack', desc: 'APIs con PHP (Drupal, Laravel), Node.js y Java Spring Boot, SQL y NoSQL.' },
   { title: 'Seguridad & hardening', desc: 'TLS, headers de seguridad, firewall, mínimo privilegio en accesos.' },
   { title: 'CI/CD & deploys', desc: 'Docker y Coolify, integración con GitHub, entornos reproducibles.' },
   { title: 'Automatización con IA', desc: 'Workflows con n8n, agentes sobre Ollama y RAG con base propia.' },
@@ -52,13 +51,14 @@ type Line = { id: number; prompt?: string; content: ReactNode };
 function Whoami() {
   return (
     <>
-      <p>Nestor Vargas — Desarrollador Full Stack.</p>
+      <p>Nestor Vargas — Desarrollador Backend / Full Stack Senior, +10 años de experiencia.</p>
       <p>
-        Especializado en Node.js, NestJS, Angular y TypeScript. Este mismo servidor (donde estás
-        parado ahora) es un proyecto personal para explorar IA self-hosted de punta a punta: Docker,
-        Ollama y n8n corriendo en un servidor propio.
+        Especialista en PHP (Drupal, Laravel), con también Node.js, Java Spring Boot y Python
+        (FastAPI). Este mismo servidor (donde estás parado ahora) es un proyecto personal para
+        explorar IA self-hosted de punta a punta: Docker, Ollama y n8n corriendo en un servidor
+        propio.
       </p>
-      <p className="term-muted">Escribí "help" para ver más comandos.</p>
+      <p className="term-muted">Escriba "help" para ver más comandos.</p>
     </>
   );
 }
@@ -122,7 +122,7 @@ function Help() {
 
 const WELCOME: Line[] = [
   { id: -2, content: <p>Bienvenido — consola interactiva sobre mi perfil.</p> },
-  { id: -1, content: <p>Escribir "help" para ver los comandos disponibles.</p> },
+  { id: -1, content: <p>Escriba "help" para ver los comandos disponibles.</p> },
 ];
 
 export default function Terminal() {
@@ -225,7 +225,7 @@ export default function Terminal() {
       <div className="section-inner">
         <span className="eyebrow">Consola</span>
         <h2>Probar mi CV en vivo</h2>
-        <p className="section-desc">Escribir comandos para explorar mi perfil, en formato terminal.</p>
+        <p className="section-desc">Escriba comandos para explorar mi perfil, en formato terminal.</p>
 
         <div className="term-window">
           <div className="term-titlebar">
