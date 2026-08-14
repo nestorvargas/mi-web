@@ -22,9 +22,6 @@ export default function Footer() {
           <a href="https://github.com/nestorvargas" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
             <i className="fa-brands fa-github" />
           </a>
-          <a href="https://wa.me/573024213805" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
-            <i className="fa-brands fa-whatsapp" />
-          </a>
         </div>
       </div>
 

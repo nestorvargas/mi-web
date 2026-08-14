@@ -46,10 +46,6 @@ export default function AboutMe() {
               <i className="fa-brands fa-github" />
               <span>github.com/nestorvargas</span>
             </a>
-            <a href="https://wa.me/573024213805" target="_blank" rel="noopener noreferrer">
-              <i className="fa-brands fa-whatsapp" />
-              <span>+57 302 421 3805</span>
-            </a>
           </div>
         </div>
       </div>

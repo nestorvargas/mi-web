@@ -91,12 +91,6 @@ function Contact() {
           github.com/nestorvargas
         </a>
       </p>
-      <p>
-        <span className="term-muted">WhatsApp</span>{' '}
-        <a href="https://wa.me/573024213805" target="_blank" rel="noopener noreferrer">
-          +57 302 421 3805
-        </a>
-      </p>
     </>
   );
 }
