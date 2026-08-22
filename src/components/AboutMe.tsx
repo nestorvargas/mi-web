@@ -9,6 +9,10 @@ export default function AboutMe() {
       <div className="section-inner">
         <span className="eyebrow">Sobre mí</span>
         <h2>Quién armó todo esto</h2>
+        <p className="section-desc">
+          Backend / Full Stack Senior con más de 10 años de experiencia, detrás de este servidor de IA
+          self-hosted.
+        </p>
         <div className="cv-card">
           <div className="cv-head">
             <div className="cv-avatar">
