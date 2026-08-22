@@ -259,7 +259,7 @@ export default function ChatWidget({ isOpen, onToggle }: Props) {
           {history.map((m, i) => (
             <div key={i} className={`msg-row ${m.role === 'user' ? 'user' : 'bot'}`}>
               <div className={`msg-avatar ${m.role === 'user' ? 'user' : 'bot'}`}>
-                {m.role === 'user' ? '' : 'IA'}
+                {m.role === 'user' ? <i className="fa-solid fa-user" style={{ fontSize: 11 }} /> : 'IA'}
               </div>
               <div className="msg-bubble">{m.role === 'user' ? m.content : renderMarkdown(m.content)}</div>
             </div>
