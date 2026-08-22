@@ -21,6 +21,24 @@ function isMobileViewport() {
   return typeof window !== 'undefined' && window.matchMedia(MOBILE_QUERY).matches;
 }
 
+// crypto.randomUUID() requires a secure context (HTTPS or localhost) and throws
+// otherwise; getRandomValues() has no such restriction and works over plain HTTP too.
+function createId() {
+  const bytes = new Uint8Array(16);
+  crypto.getRandomValues(bytes);
+  return Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+const SESSION_ID_KEY = 'chat_session_id';
+
+function getOrCreateSessionId(): string {
+  const stored = window.localStorage.getItem(SESSION_ID_KEY);
+  if (stored) return stored;
+  const id = createId();
+  window.localStorage.setItem(SESSION_ID_KEY, id);
+  return id;
+}
+
 type Message = { role: 'user' | 'assistant'; content: string };
 
 // Minimal markdown renderer for what the model actually produces: **bold**,
@@ -116,6 +134,7 @@ export default function ChatWidget({ isOpen, onToggle }: Props) {
   const [loading, setLoading] = useState(false);
   const messagesRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const sessionIdRef = useRef<string>('');
 
   useEffect(() => {
     if (isOpen && !isMobileViewport()) inputRef.current?.focus();
@@ -149,6 +168,10 @@ export default function ChatWidget({ isOpen, onToggle }: Props) {
     const text = overrideText ?? input.trim();
     if (!text || loading) return;
 
+    if (!sessionIdRef.current) {
+      sessionIdRef.current = getOrCreateSessionId();
+    }
+
     const nextHistory: Message[] = [...history, { role: 'user', content: text }];
     setHistory(nextHistory);
     setInput('');
@@ -159,7 +182,7 @@ export default function ChatWidget({ isOpen, onToggle }: Props) {
       const res = await fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: nextHistory }),
+        body: JSON.stringify({ messages: nextHistory, sessionId: sessionIdRef.current }),
       });
       if (!res.ok) throw new Error(`Error ${res.status}`);
       const data = await res.json();
