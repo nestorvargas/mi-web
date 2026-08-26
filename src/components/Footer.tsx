@@ -2,22 +2,22 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '../i18n/LanguageContext';
 
 export default function Footer() {
-  const { t } = useLanguage();
+  const { t, withLang } = useLanguage();
 
   return (
     <footer>
       <div className="footer-inner">
-        <Link className="footer-brand" to="/">
+        <Link className="footer-brand" to={withLang('/')}>
           <div className="logo">IA</div>
           <span>Nestor Vargas</span>
         </Link>
 
         <nav className="footer-nav" aria-label="Secciones">
-          <a href="/#servicios">{t.nav.services}</a>
-          <a href="/#stack">{t.nav.stack}</a>
-          <a href="/#portfolio">{t.nav.portfolio}</a>
-          <a href="/#terminal">{t.nav.console}</a>
-          <a href="/#sobre-mi">{t.nav.about}</a>
+          <a href={`${withLang('/')}#servicios`}>{t.nav.services}</a>
+          <a href={`${withLang('/')}#stack`}>{t.nav.stack}</a>
+          <a href={`${withLang('/')}#portfolio`}>{t.nav.portfolio}</a>
+          <a href={`${withLang('/')}#terminal`}>{t.nav.console}</a>
+          <a href={`${withLang('/')}#sobre-mi`}>{t.nav.about}</a>
         </nav>
 
         <div className="footer-social">
@@ -32,7 +32,7 @@ export default function Footer() {
 
       <div className="footer-bottom">
         <p>{t.footer.copyright.replace('{year}', String(new Date().getFullYear()))}</p>
-        <a className="footer-top" href="/#hero">
+        <a className="footer-top" href={`${withLang('/')}#hero`}>
           {t.footer.backToTop} <i className="fa-solid fa-arrow-up" />
         </a>
       </div>

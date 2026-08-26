@@ -4,9 +4,9 @@ import { useLanguage } from '../i18n/LanguageContext';
 import { usePageMeta } from '../hooks/usePageMeta';
 
 export default function DesarrolloIaPage() {
-  const { t } = useLanguage();
+  const { t, withLang } = useLanguage();
   const p = t.devAiPage;
-  usePageMeta(p.meta, '/desarrollo-ia');
+  usePageMeta(p.meta, 'devAi');
 
   return (
     <section className="detail-page">
@@ -38,8 +38,8 @@ export default function DesarrolloIaPage() {
               {p.pipelineTitle}
             </p>
             <p>
-              <Link to="/n8n">n8n</Link> {p.pipelineBefore}{' '}
-              <Link to="/chat-ia">{t.chatIaPage.title}</Link>
+              <Link to={withLang('/n8n')}>n8n</Link> {p.pipelineBefore}{' '}
+              <Link to={withLang('/chat-ia')}>{t.chatIaPage.title}</Link>
               {p.pipelineAfter}
             </p>
           </div>
@@ -50,13 +50,13 @@ export default function DesarrolloIaPage() {
               {p.hereTitle}
             </p>
             <div className="detail-cross">
-              <Link to="/n8n">
+              <Link to={withLang('/n8n')}>
                 <span className="detail-cross-icon">
                   <i className="fa-solid fa-diagram-project" />
                 </span>
                 <span>{p.crossN8n}</span>
               </Link>
-              <Link to="/chat-ia">
+              <Link to={withLang('/chat-ia')}>
                 <span className="detail-cross-icon">
                   <i className="fa-solid fa-comment-dots" />
                 </span>

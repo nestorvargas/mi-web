@@ -4,9 +4,9 @@ import { useLanguage } from '../i18n/LanguageContext';
 import { usePageMeta } from '../hooks/usePageMeta';
 
 export default function N8nPage() {
-  const { t } = useLanguage();
+  const { t, withLang } = useLanguage();
   const p = t.n8nPage;
-  usePageMeta(p.meta, '/n8n');
+  usePageMeta(p.meta, 'n8n');
 
   return (
     <section className="detail-page">
@@ -53,13 +53,13 @@ export default function N8nPage() {
               {p.hereTitle}
             </p>
             <div className="detail-cross">
-              <Link to="/chat-ia">
+              <Link to={withLang('/chat-ia')}>
                 <span className="detail-cross-icon">
                   <i className="fa-solid fa-comment-dots" />
                 </span>
                 <span>{p.crossChatIa}</span>
               </Link>
-              <Link to="/desarrollo-ia">
+              <Link to={withLang('/desarrollo-ia')}>
                 <span className="detail-cross-icon">
                   <i className="fa-solid fa-code" />
                 </span>

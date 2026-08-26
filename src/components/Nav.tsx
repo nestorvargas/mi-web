@@ -3,46 +3,47 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '../i18n/LanguageContext';
 
 export default function Nav() {
-  const { lang, setLang, t } = useLanguage();
+  const { lang, setLang, t, withLang } = useLanguage();
   const [open, setOpen] = useState(false);
 
   return (
     <nav>
-      <Link className="nav-brand" to="/">
+      <Link className="nav-brand" to={withLang('/')}>
         <div className="logo">IA</div>
         <span>{t.nav.brand}</span>
       </Link>
 
       <ul className={`nav-links ${open ? 'open' : ''}`}>
         <li>
-          <a href="/#servicios" onClick={() => setOpen(false)}>
+          <a href={`${withLang('/')}#servicios`} onClick={() => setOpen(false)}>
             {t.nav.services}
           </a>
         </li>
         <li>
-          <a href="/#stack" onClick={() => setOpen(false)}>
+          <a href={`${withLang('/')}#stack`} onClick={() => setOpen(false)}>
             {t.nav.stack}
           </a>
         </li>
         <li>
-          <a href="/#portfolio" onClick={() => setOpen(false)}>
+          <a href={`${withLang('/')}#portfolio`} onClick={() => setOpen(false)}>
             {t.nav.portfolio}
           </a>
         </li>
         <li>
-          <a href="/#terminal" onClick={() => setOpen(false)}>
+          <a href={`${withLang('/')}#terminal`} onClick={() => setOpen(false)}>
             {t.nav.console}
           </a>
         </li>
         <li>
-          <a href="/#sobre-mi" onClick={() => setOpen(false)}>
+          <a href={`${withLang('/')}#sobre-mi`} onClick={() => setOpen(false)}>
             {t.nav.about}
           </a>
         </li>
       </ul>
 
       <div className="nav-right">
-        <div className="lang-switch" role="group" aria-label="Language">
+        <fieldset className="lang-switch">
+          <legend className="visually-hidden">Language</legend>
           <button
             type="button"
             className={lang === 'es' ? 'active' : undefined}
@@ -57,7 +58,7 @@ export default function Nav() {
           >
             EN
           </button>
-        </div>
+        </fieldset>
 
         <button
           type="button"

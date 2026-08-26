@@ -9,12 +9,12 @@ type Props = {
   children: ReactNode;
 };
 
-export default function DetailHeader({ icon, iconClass, title, children }: Props) {
-  const { t } = useLanguage();
+export default function DetailHeader({ icon, iconClass, title, children }: Readonly<Props>) {
+  const { t, withLang } = useLanguage();
 
   return (
     <div className="detail-header">
-      <Link className="detail-back" to="/">
+      <Link className="detail-back" to={withLang('/')}>
         <i className="fa-solid fa-arrow-left" />
         {t.detail.back}
       </Link>

@@ -6,9 +6,9 @@ import { usePageMeta } from '../hooks/usePageMeta';
 const stack = ['NestJS', 'Next.js (App Router)', 'n8n', 'Ollama', 'SQLite', 'Docker', 'Coolify'];
 
 export default function ChatIaPage() {
-  const { t } = useLanguage();
+  const { t, withLang } = useLanguage();
   const p = t.chatIaPage;
-  usePageMeta(p.meta, '/chat-ia');
+  usePageMeta(p.meta, 'chatIa');
 
   return (
     <section className="detail-page">
@@ -35,7 +35,7 @@ export default function ChatIaPage() {
                 <span className="detail-flow-index">2</span>
                 <p>
                   <strong>{p.step2.title}</strong>
-                  {p.step2.before} <Link to="/n8n">n8n</Link> {p.step2.after}
+                  {p.step2.before} <Link to={withLang('/n8n')}>n8n</Link> {p.step2.after}
                 </p>
               </div>
               <div className="detail-flow-step">
@@ -80,13 +80,13 @@ export default function ChatIaPage() {
               {p.hereTitle}
             </p>
             <div className="detail-cross">
-              <Link to="/n8n">
+              <Link to={withLang('/n8n')}>
                 <span className="detail-cross-icon">
                   <i className="fa-solid fa-diagram-project" />
                 </span>
                 <span>{p.crossN8n}</span>
               </Link>
-              <Link to="/desarrollo-ia">
+              <Link to={withLang('/desarrollo-ia')}>
                 <span className="detail-cross-icon">
                   <i className="fa-solid fa-code" />
                 </span>

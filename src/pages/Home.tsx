@@ -13,7 +13,7 @@ type Props = {
 
 export default function Home({ onOpenChat }: Props) {
   const { t } = useLanguage();
-  usePageMeta(t.home.meta, '/');
+  usePageMeta(t.home.meta, 'home');
 
   return (
     <>

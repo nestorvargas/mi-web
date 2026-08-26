@@ -6,12 +6,12 @@ import { useLanguage } from '../i18n/LanguageContext';
 export default function Services() {
   const { ref, visible } = useReveal<HTMLElement>();
   const onMouseMove = useSpotlight();
-  const { t } = useLanguage();
+  const { t, withLang } = useLanguage();
 
   const services = [
-    { to: '/chat-ia', icon: 'fa-comment-dots', iconClass: 'chatbot', ...t.services.chatIa },
-    { to: '/n8n', icon: 'fa-diagram-project', iconClass: 'n8n', ...t.services.n8n },
-    { to: '/desarrollo-ia', icon: 'fa-wand-magic-sparkles', iconClass: 'devai', ...t.services.devai },
+    { to: withLang('/chat-ia'), icon: 'fa-comment-dots', iconClass: 'chatbot', ...t.services.chatIa },
+    { to: withLang('/n8n'), icon: 'fa-diagram-project', iconClass: 'n8n', ...t.services.n8n },
+    { to: withLang('/desarrollo-ia'), icon: 'fa-wand-magic-sparkles', iconClass: 'devai', ...t.services.devai },
   ];
 
   return (
