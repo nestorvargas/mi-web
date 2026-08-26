@@ -1,14 +1,8 @@
 import { Fragment, useEffect, useRef, useState } from 'react';
 import type { ChangeEvent, FormEvent, KeyboardEvent, ReactNode } from 'react';
+import { useLanguage } from '../i18n/LanguageContext';
 
 const API_URL = 'https://chat.nestordevelop.online/api/chat';
-
-const SUGGESTED_PROMPTS = [
-  '¿Qué proyectos hizo Nestor?',
-  '¿Tiene experiencia con PHP?',
-  '¿Cuáles son sus skills?',
-  '¿Cómo lo contacto?',
-];
 
 const MOBILE_QUERY = '(max-width: 640px)';
 
@@ -129,6 +123,7 @@ type Props = {
 };
 
 export default function ChatWidget({ isOpen, onToggle }: Props) {
+  const { t } = useLanguage();
   const [history, setHistory] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -188,10 +183,7 @@ export default function ChatWidget({ isOpen, onToggle }: Props) {
       const data = await res.json();
       setHistory((prev) => [...prev, { role: 'assistant', content: data.response ?? '' }]);
     } catch {
-      setHistory((prev) => [
-        ...prev,
-        { role: 'assistant', content: 'Hubo un error de conexión. Intente de nuevo en un momento.' },
-      ]);
+      setHistory((prev) => [...prev, { role: 'assistant', content: t.chatWidget.errorMessage }]);
     } finally {
       setLoading(false);
       if (!isMobileViewport()) inputRef.current?.focus();
@@ -208,7 +200,7 @@ export default function ChatWidget({ isOpen, onToggle }: Props) {
       <button
         id="chat-launcher"
         type="button"
-        aria-label={isOpen ? 'Cerrar chat' : 'Abrir chat'}
+        aria-label={isOpen ? t.chatWidget.closeAria : t.chatWidget.openAria}
         className={isOpen ? 'open' : undefined}
         onClick={onToggle}
       >
@@ -220,16 +212,16 @@ export default function ChatWidget({ isOpen, onToggle }: Props) {
         <div className="chat-header">
           <div className="logo">IA</div>
           <div>
-            <div className="title">Chatbot IA</div>
+            <div className="title">{t.chatWidget.title}</div>
             <div className="status">
               <span className="dot" />
-              En línea
+              {t.chatWidget.status}
             </div>
           </div>
           <button
             id="chat-header-close"
             type="button"
-            aria-label="Cerrar chat"
+            aria-label={t.chatWidget.closeAria}
             onClick={onToggle}
           >
             <i className="fa-solid fa-xmark" />
@@ -240,10 +232,10 @@ export default function ChatWidget({ isOpen, onToggle }: Props) {
           {history.length === 0 && (
             <div id="chat-empty-state">
               <div className="chat-empty-icon">IA</div>
-              <p className="chat-empty-title">¿En qué le puedo ayudar?</p>
-              <p className="chat-empty-subtitle">Pregunte sobre la experiencia de Nestor, o elija una opción:</p>
+              <p className="chat-empty-title">{t.chatWidget.emptyTitle}</p>
+              <p className="chat-empty-subtitle">{t.chatWidget.emptySubtitle}</p>
               <div className="chat-suggested-prompts">
-                {SUGGESTED_PROMPTS.map((prompt) => (
+                {t.chatWidget.suggested.map((prompt) => (
                   <button
                     key={prompt}
                     type="button"
@@ -290,19 +282,19 @@ export default function ChatWidget({ isOpen, onToggle }: Props) {
               whiteSpace: 'nowrap',
             }}
           >
-            Mensaje para el chatbot
+            {t.chatWidget.inputLabel}
           </label>
           <textarea
             id="chat-input"
             ref={inputRef}
             rows={1}
-            placeholder="Escriba su mensaje..."
+            placeholder={t.chatWidget.placeholder}
             value={input}
             onChange={handleInput}
             onKeyDown={handleKeyDown}
             disabled={loading}
           />
-          <button id="chat-send" type="submit" aria-label="Enviar" disabled={loading || !input.trim()}>
+          <button id="chat-send" type="submit" aria-label={t.chatWidget.sendAria} disabled={loading || !input.trim()}>
             <i className="fa-solid fa-paper-plane" style={{ fontSize: 14 }} />
           </button>
         </form>

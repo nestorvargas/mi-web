@@ -3,6 +3,8 @@ import type { KeyboardEvent, ReactNode } from 'react';
 import { useReveal } from '../hooks/useReveal';
 import { experience } from '../data/experience';
 import { capabilities, skills as SKILLS } from '../data/capabilities';
+import { useLanguage } from '../i18n/LanguageContext';
+import type { Dictionary } from '../i18n/types';
 
 const SECTIONS: Record<string, string> = {
   hero: 'hero',
@@ -12,32 +14,14 @@ const SECTIONS: Record<string, string> = {
   'sobre-mi': 'sobre-mi',
 };
 
-const PROJECTS = capabilities;
-
-const HELP_LINES = [
-  ['whoami', 'Quién soy'],
-  ['skills', 'Habilidades técnicas'],
-  ['projects', 'En qué trabajo'],
-  ['experience', 'Experiencia laboral'],
-  ['contact', 'Cómo contactarme'],
-  ['scroll <sección>', 'Navegar a una sección de la web'],
-  ['clear', 'Limpiar la terminal'],
-  ['help', 'Mostrar esta ayuda'],
-];
-
 type Line = { id: number; prompt?: string; content: ReactNode };
 
-function Whoami() {
+function Whoami({ t }: { t: Dictionary }) {
   return (
     <>
-      <p>Nestor Vargas — Desarrollador Backend / Full Stack Senior, +10 años de experiencia.</p>
-      <p>
-        Especialista en PHP (Drupal, Laravel), con también Node.js, Java Spring Boot y Python
-        (FastAPI). Este mismo servidor (donde estás parado ahora) es un proyecto personal para
-        explorar IA self-hosted de punta a punta: Docker, Ollama y n8n corriendo en un servidor
-        propio.
-      </p>
-      <p className="term-muted">Escriba "help" para ver más comandos.</p>
+      <p>{t.terminal.whoami.p1}</p>
+      <p>{t.terminal.whoami.p2}</p>
+      <p className="term-muted">{t.terminal.whoami.hint}</p>
     </>
   );
 }
@@ -46,47 +30,53 @@ function Skills() {
   return <p>{SKILLS.join('  ·  ')}</p>;
 }
 
-function Projects() {
+function Projects({ t }: { t: Dictionary }) {
   return (
     <>
-      <p>Soy Desarrollador Full Stack. Estos son los pilares en los que trabajo:</p>
-      {PROJECTS.map((p, i) => (
-        <p key={p.title}>
-          <span className="term-accent">{String(i + 1).padStart(2, '0')}.</span> <strong>{p.title}</strong>{' '}
-          — {p.desc}
-        </p>
-      ))}
+      <p>{t.terminal.projectsIntro}</p>
+      {capabilities.map((p, i) => {
+        const copy = t.portfolio.capabilities[p.id];
+        return (
+          <p key={p.id}>
+            <span className="term-accent">{String(i + 1).padStart(2, '0')}.</span> <strong>{copy.title}</strong>{' '}
+            — {copy.desc}
+          </p>
+        );
+      })}
     </>
   );
 }
 
-function Experience() {
+function Experience({ t }: { t: Dictionary }) {
   return (
     <>
-      <p>Experiencia laboral (más reciente primero):</p>
-      {experience.map((job) => (
-        <p key={job.company}>
-          <span className="term-accent">{job.period.padEnd(20, ' ')}</span>
-          <strong>{job.company}</strong> — {job.role}
-          <br />
-          <span className="term-muted">&nbsp;&nbsp;&nbsp;&nbsp;{job.stack.join(', ')}</span>
-        </p>
-      ))}
+      <p>{t.terminal.experienceIntro}</p>
+      {experience.map((job) => {
+        const copy = t.portfolio.jobs[job.id];
+        return (
+          <p key={job.id}>
+            <span className="term-accent">{copy.period.padEnd(20, ' ')}</span>
+            <strong>{job.company}</strong> — {copy.role}
+            <br />
+            <span className="term-muted">&nbsp;&nbsp;&nbsp;&nbsp;{job.stack.join(', ')}</span>
+          </p>
+        );
+      })}
     </>
   );
 }
 
-function Contact() {
+function Contact({ t }: { t: Dictionary }) {
   return (
     <>
       <p>
-        <span className="term-muted">LinkedIn </span>
+        <span className="term-muted">{t.terminal.contactLinkedIn} </span>
         <a href="https://linkedin.com/in/nestorfabian92" target="_blank" rel="noopener noreferrer">
           linkedin.com/in/nestorfabian92
         </a>
       </p>
       <p>
-        <span className="term-muted">GitHub  </span>
+        <span className="term-muted">{t.terminal.contactGitHub} </span>
         <a href="https://github.com/nestorvargas" target="_blank" rel="noopener noreferrer">
           github.com/nestorvargas
         </a>
@@ -95,11 +85,11 @@ function Contact() {
   );
 }
 
-function Help() {
+function Help({ t }: { t: Dictionary }) {
   return (
     <>
-      <p>Comandos disponibles:</p>
-      {HELP_LINES.map(([cmd, desc]) => (
+      <p>{t.terminal.helpIntro}</p>
+      {t.terminal.help.map(({ cmd, desc }) => (
         <p key={cmd}>
           <span className="term-accent">{cmd.padEnd(16, ' ')}</span>
           {desc}
@@ -109,14 +99,12 @@ function Help() {
   );
 }
 
-const WELCOME: Line[] = [
-  { id: -2, content: <p>Bienvenido — consola interactiva sobre mi perfil.</p> },
-  { id: -1, content: <p>Escriba "help" para ver los comandos disponibles.</p> },
-];
-
 export default function Terminal() {
   const { ref, visible } = useReveal<HTMLElement>();
-  const [lines, setLines] = useState<Line[]>(WELCOME);
+  const { t } = useLanguage();
+  const [lines, setLines] = useState<Line[]>(() =>
+    t.terminal.welcome.map((text, i) => ({ id: -(i + 1), content: <p>{text}</p> })),
+  );
   const [input, setInput] = useState('');
   const [history, setHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState<number | null>(null);
@@ -141,22 +129,22 @@ export default function Terminal() {
     let content: ReactNode;
     switch (name) {
       case 'whoami':
-        content = <Whoami />;
+        content = <Whoami t={t} />;
         break;
       case 'skills':
         content = <Skills />;
         break;
       case 'projects':
-        content = <Projects />;
+        content = <Projects t={t} />;
         break;
       case 'experience':
-        content = <Experience />;
+        content = <Experience t={t} />;
         break;
       case 'contact':
-        content = <Contact />;
+        content = <Contact t={t} />;
         break;
       case 'help':
-        content = <Help />;
+        content = <Help t={t} />;
         break;
       case 'clear':
         setLines([]);
@@ -165,18 +153,30 @@ export default function Terminal() {
         if (!arg) {
           content = (
             <p>
-              Uso: scroll &lt;sección&gt; — disponibles: {Object.keys(SECTIONS).join(', ')}
+              {t.terminal.scrollUsage} {Object.keys(SECTIONS).join(', ')}
             </p>
           );
         } else if (SECTIONS[arg]) {
           document.getElementById(SECTIONS[arg])?.scrollIntoView({ behavior: 'smooth' });
-          content = <p>Navegando a "{arg}"...</p>;
+          content = (
+            <p>
+              {t.terminal.scrollNavigating} "{arg}"...
+            </p>
+          );
         } else {
-          content = <p>scroll: sección "{arg}" no encontrada</p>;
+          content = (
+            <p>
+              scroll: "{arg}" {t.terminal.scrollNotFound}
+            </p>
+          );
         }
         break;
       default:
-        content = <p>bash: {name}: command not found</p>;
+        content = (
+          <p>
+            bash: {name}: {t.terminal.notFound}
+          </p>
+        );
     }
 
     setLines((prev) => [...prev, { id: nextId.current++, prompt: raw, content }]);
@@ -215,30 +215,30 @@ export default function Terminal() {
   return (
     <section id="terminal" ref={ref} className={`reveal ${visible ? 'visible' : ''}`}>
       <div className="section-inner">
-        <span className="eyebrow">Consola</span>
-        <h2>Probar mi CV en vivo</h2>
-        <p className="section-desc">Escriba comandos para explorar mi perfil, en formato terminal.</p>
+        <span className="eyebrow">{t.terminal.eyebrow}</span>
+        <h2>{t.terminal.title}</h2>
+        <p className="section-desc">{t.terminal.desc}</p>
 
         <div className="term-window">
           <div className="term-titlebar">
             <span className="term-dot term-dot-red" />
             <span className="term-dot term-dot-yellow" />
             <span className="term-dot term-dot-green" />
-            <span className="term-titletext">cliente@server: ~</span>
+            <span className="term-titletext">{t.terminal.windowTitle}</span>
           </div>
           <div className="term-body" ref={bodyRef}>
             {lines.map((line) => (
               <div key={line.id} className="term-line">
                 {line.prompt !== undefined && (
                   <p className="term-cmd">
-                    <span className="term-prompt">cliente@server:~$</span> {line.prompt}
+                    <span className="term-prompt">{t.terminal.prompt}</span> {line.prompt}
                   </p>
                 )}
                 {line.content}
               </div>
             ))}
             <div className="term-inputrow">
-              <span className="term-prompt">cliente@server:~$</span>
+              <span className="term-prompt">{t.terminal.windowTitle.replace(' ', '')}$</span>
               <input
                 ref={inputRef}
                 type="text"
@@ -248,7 +248,7 @@ export default function Terminal() {
                 autoComplete="off"
                 autoCapitalize="off"
                 spellCheck={false}
-                aria-label="Comando de la consola"
+                aria-label={t.terminal.inputAria}
               />
             </div>
           </div>

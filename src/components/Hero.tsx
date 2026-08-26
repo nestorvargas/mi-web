@@ -1,8 +1,12 @@
+import { useLanguage } from '../i18n/LanguageContext';
+
 type Props = {
   onOpenChat: () => void;
 };
 
 export default function Hero({ onOpenChat }: Props) {
+  const { t } = useLanguage();
+
   return (
     <section className="hero" id="hero">
       <div className="hero-glow" aria-hidden="true" />
@@ -12,36 +16,35 @@ export default function Hero({ onOpenChat }: Props) {
           <span className="logo-divider" />
           <i className="fa-solid fa-code logo-code" />
         </div>
-        <h1>Desarrollador Web Full Stack - IA — Nestor Vargas</h1>
+        <h1>{t.hero.title}</h1>
         <p>
-          Desarrollo de aplicaciones web con tecnologías modernas y prácticas, integrando
-          inteligencia artificial en soluciones digitales.
+          {t.hero.subtitle}
           <span className="hero-cursor" aria-hidden="true" />
         </p>
         <div className="hero-actions">
           <button className="btn btn-primary" type="button" onClick={onOpenChat}>
-            Probar el chat
+            {t.hero.ctaChat}
           </button>
           <a className="btn btn-secondary" href="#servicios">
-            Ver servicios
+            {t.hero.ctaServices}
           </a>
         </div>
         <div className="hero-stats">
           <div className="hero-stat">
-            <strong>10+</strong>
-            <span>Años de experiencia</span>
+            <strong>{t.hero.stats.years}</strong>
+            <span>{t.hero.stats.yearsLabel}</span>
           </div>
           <div className="hero-stat">
-            <strong>3</strong>
-            <span>Servicios en vivo</span>
+            <strong>{t.hero.stats.projects}</strong>
+            <span>{t.hero.stats.projectsLabel}</span>
           </div>
           <div className="hero-stat">
-            <strong>100%</strong>
-            <span>Self-hosted</span>
+            <strong>{t.hero.stats.role}</strong>
+            <span>{t.hero.stats.roleLabel}</span>
           </div>
         </div>
       </div>
-      <a className="scroll-cue" href="#servicios" aria-label="Bajar a la sección de servicios">
+      <a className="scroll-cue" href="#servicios" aria-label={t.hero.scrollAria}>
         <span />
         <i className="fa-solid fa-chevron-down" />
       </a>

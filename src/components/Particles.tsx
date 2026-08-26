@@ -51,7 +51,7 @@ export default function Particles() {
 
     function makeStars() {
       const drawHeight = height;
-      const starCount = Math.min(260, Math.round((width * drawHeight) / 11000));
+      const starCount = Math.min(420, Math.round((width * drawHeight) / 7000));
       stars = [];
       for (let i = 0; i < starCount; i++) {
         const big = Math.random() < 0.14;

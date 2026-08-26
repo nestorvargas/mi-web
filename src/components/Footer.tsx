@@ -1,18 +1,23 @@
+import { Link } from 'react-router-dom';
+import { useLanguage } from '../i18n/LanguageContext';
+
 export default function Footer() {
+  const { t } = useLanguage();
+
   return (
     <footer>
       <div className="footer-inner">
-        <a className="footer-brand" href="#hero">
+        <Link className="footer-brand" to="/">
           <div className="logo">IA</div>
           <span>Nestor Vargas</span>
-        </a>
+        </Link>
 
         <nav className="footer-nav" aria-label="Secciones">
-          <a href="#servicios">Servicios</a>
-          <a href="#stack">Stack</a>
-          <a href="#portfolio">Portfolio</a>
-          <a href="#terminal">Consola</a>
-          <a href="#sobre-mi">Sobre mí</a>
+          <a href="/#servicios">{t.nav.services}</a>
+          <a href="/#stack">{t.nav.stack}</a>
+          <a href="/#portfolio">{t.nav.portfolio}</a>
+          <a href="/#terminal">{t.nav.console}</a>
+          <a href="/#sobre-mi">{t.nav.about}</a>
         </nav>
 
         <div className="footer-social">
@@ -26,9 +31,9 @@ export default function Footer() {
       </div>
 
       <div className="footer-bottom">
-        <p>&copy; {new Date().getFullYear()} Nestor Vargas. Todos los derechos reservados.</p>
-        <a className="footer-top" href="#hero">
-          Volver arriba <i className="fa-solid fa-arrow-up" />
+        <p>{t.footer.copyright.replace('{year}', String(new Date().getFullYear()))}</p>
+        <a className="footer-top" href="/#hero">
+          {t.footer.backToTop} <i className="fa-solid fa-arrow-up" />
         </a>
       </div>
     </footer>

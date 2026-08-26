@@ -1,53 +1,45 @@
 export type Job = {
+  id: string;
   company: string;
-  role: string;
-  period: string;
   current?: boolean;
   stack: string[];
 };
 
 export const experience: Job[] = [
   {
+    id: 'complemento360',
     company: 'Complemento 360',
-    role: 'Desarrollador Full Stack',
-    period: 'Nov 2022 — Actual',
     current: true,
     stack: ['PHP', 'Node.js', 'Drupal', 'Laravel', 'MySQL', 'Redis', 'Docker', 'Azure DevOps'],
   },
   {
+    id: 'estrenar-vivienda',
     company: 'Estrenar Vivienda',
-    role: 'Líder de Desarrollo — PHP',
-    period: 'Nov 2021 — Nov 2022',
     stack: ['PHP', 'Drupal', 'Laravel', 'MySQL', 'Redis', 'GitLab CI/CD', 'Docker'],
   },
   {
+    id: 'ariadna',
     company: 'Ariadna Communications Group',
-    role: 'Desarrollador Drupal',
-    period: 'Jun 2021 — Nov 2021',
     stack: ['PHP', 'Drupal API', 'Tailwind', 'Bootstrap', 'MySQL', 'PostgreSQL'],
   },
   {
+    id: 'esinergia',
     company: 'ESinergia',
-    role: 'Desarrollador Drupal',
-    period: 'Sep 2020 — Jun 2021',
     stack: ['PHP', 'Drupal API', 'MySQL', 'Redis', 'Docker (DDEV)'],
   },
   {
+    id: 'invima',
     company: 'Invima',
-    role: 'Desarrollador Full Stack',
-    period: 'Ago 2017 — Sep 2021',
     stack: ['PHP', 'Drupal', 'Laravel', 'Java', 'MySQL', 'Redis'],
   },
   {
+    id: 'indexcol',
     company: 'Indexcol',
-    role: 'Desarrollador Drupal',
-    period: 'Ago 2017 — Sep 2021',
     stack: ['PHP', 'Drupal API', 'MySQL', 'PostgreSQL'],
   },
   {
+    id: 'tecsua',
     company: 'Tecsua SAS',
-    role: 'Desarrollador Full Stack, Soporte',
-    period: 'Mar 2014 — Jul 2017',
     stack: ['PHP', 'Drupal', 'MySQL', 'PostgreSQL'],
   },
 ];

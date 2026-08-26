@@ -1,18 +1,17 @@
 import { useReveal } from '../hooks/useReveal';
 import { skills } from '../data/capabilities';
+import { useLanguage } from '../i18n/LanguageContext';
 
 export default function AboutMe() {
   const { ref, visible } = useReveal<HTMLElement>();
+  const { t } = useLanguage();
 
   return (
     <section id="sobre-mi" ref={ref} className={`reveal ${visible ? 'visible' : ''}`}>
       <div className="section-inner">
-        <span className="eyebrow">Sobre mí</span>
-        <h2>Quién armó todo esto</h2>
-        <p className="section-desc">
-          Backend / Full Stack Senior con más de 10 años de experiencia, detrás de este servidor de IA
-          self-hosted.
-        </p>
+        <span className="eyebrow">{t.aboutMe.eyebrow}</span>
+        <h2>{t.aboutMe.title}</h2>
+        <p className="section-desc">{t.aboutMe.desc}</p>
         <div className="cv-card">
           <div className="cv-head">
             <div className="cv-avatar">
@@ -20,18 +19,14 @@ export default function AboutMe() {
             </div>
             <div>
               <p className="cv-name">Nestor Vargas</p>
-              <p className="cv-role">Desarrollador Fullstack</p>
+              <p className="cv-role">{t.aboutMe.role}</p>
             </div>
           </div>
 
-          <p className="cv-bio">
-            Desarrollador Backend / Full Stack Senior con más de 10 años de experiencia. Especialista
-            en PHP (Drupal, Laravel), con también Node.js, Java Spring Boot y Python (FastAPI). Este
-            servidor es un proyecto personal para explorar IA self-hosted de punta a punta.
-          </p>
+          <p className="cv-bio">{t.aboutMe.bio}</p>
 
           <div>
-            <p className="cv-block-title">Habilidades</p>
+            <p className="cv-block-title">{t.aboutMe.skillsTitle}</p>
             <div className="cv-skills">
               {skills.map((skill) => (
                 <span key={skill} className="cv-skill">
