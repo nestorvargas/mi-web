@@ -1,6 +1,14 @@
 export type Lang = 'es' | 'en';
 
+export type PageMeta = {
+  title: string;
+  description: string;
+};
+
 export type Dictionary = {
+  home: {
+    meta: PageMeta;
+  };
   nav: {
     brand: string;
     services: string;
@@ -82,6 +90,7 @@ export type Dictionary = {
     back: string;
   };
   n8nPage: {
+    meta: PageMeta;
     title: string;
     intro: string;
     flowTitle: string;
@@ -94,6 +103,7 @@ export type Dictionary = {
     crossDevAi: string;
   };
   chatIaPage: {
+    meta: PageMeta;
     title: string;
     intro: string;
     archTitle: string;
@@ -110,6 +120,7 @@ export type Dictionary = {
     ctaLive: string;
   };
   devAiPage: {
+    meta: PageMeta;
     title: string;
     intro: string;
     codeTitle: string;

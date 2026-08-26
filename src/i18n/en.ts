@@ -1,6 +1,13 @@
 import type { Dictionary } from './types';
 
 export const en: Dictionary = {
+  home: {
+    meta: {
+      title: 'Nestor Vargas — Full Stack Developer | Web Portals & Apps',
+      description:
+        'Full Stack developer with 10+ years of experience. Building web portals, custom applications, and AI automation — end to end: frontend, backend, and deployment.',
+    },
+  },
   nav: {
     brand: 'Full Stack Web Developer - AI',
     services: 'Services',
@@ -141,6 +148,11 @@ export const en: Dictionary = {
     back: 'Back to home',
   },
   n8nPage: {
+    meta: {
+      title: 'How I build with n8n — Nestor Vargas',
+      description:
+        "n8n is this self-hosted AI server's orchestration layer: it connects the chatbot, the RAG pipeline, and the Ollama models without a custom backend per integration.",
+    },
     title: 'How I build with n8n',
     intro:
       "n8n is this server's orchestration layer: it connects the chatbot, the RAG pipeline, and the Ollama models without writing a custom backend for every integration.",
@@ -172,6 +184,11 @@ export const en: Dictionary = {
     crossDevAi: 'How I build with AI in general',
   },
   chatIaPage: {
+    meta: {
+      title: 'Chat AI — Nestor Vargas',
+      description:
+        'A chat app of my own, a NestJS + Next.js monorepo, connected to the n8n pipeline with a knowledge base (RAG) over Ollama models.',
+    },
     title: 'Chat AI',
     intro:
       'A chat app of my own, a NestJS + Next.js monorepo, connected to the n8n pipeline with a knowledge base (RAG) over Ollama models.',
@@ -200,6 +217,11 @@ export const en: Dictionary = {
     ctaLive: 'Open the live chat',
   },
   devAiPage: {
+    meta: {
+      title: 'How I build with AI — Nestor Vargas',
+      description:
+        'Code assistants, self-hosted models with Ollama, and automation with n8n: how I fold AI into my daily workflow without losing control of the architecture.',
+    },
     title: 'How I build with AI',
     intro:
       "AI isn't just this server's product — it's part of how I build it day to day, from architecture to code to debugging.",

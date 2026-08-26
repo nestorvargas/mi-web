@@ -1,6 +1,13 @@
 import type { Dictionary } from './types';
 
 export const es: Dictionary = {
+  home: {
+    meta: {
+      title: 'Nestor Vargas — Desarrollador Full Stack | Portales y Apps Web',
+      description:
+        'Desarrollador Full Stack con +10 años de experiencia. Desarrollo portales web, aplicaciones a medida y automatización con IA — de punta a punta: frontend, backend y despliegue.',
+    },
+  },
   nav: {
     brand: 'Desarrollador Web Full Stack - IA',
     services: 'Servicios',
@@ -141,6 +148,11 @@ export const es: Dictionary = {
     back: 'Volver al inicio',
   },
   n8nPage: {
+    meta: {
+      title: 'Cómo desarrollo con n8n — Nestor Vargas',
+      description:
+        'n8n es la capa de orquestación de este servidor de IA self-hosted: conecta el chatbot, el RAG y los modelos de Ollama sin un backend a medida por integración.',
+    },
     title: 'Cómo desarrollo con n8n',
     intro:
       'n8n es la capa de orquestación de este servidor: conecta el chatbot, el RAG y los modelos de Ollama sin escribir un backend a medida para cada integración.',
@@ -172,6 +184,11 @@ export const es: Dictionary = {
     crossDevAi: 'Cómo desarrollo con IA en general',
   },
   chatIaPage: {
+    meta: {
+      title: 'Chat IA — Nestor Vargas',
+      description:
+        'Aplicación de chat propia, monorepo NestJS + Next.js, conectada al pipeline de n8n con base de conocimiento (RAG) sobre modelos de Ollama.',
+    },
     title: 'Chat IA',
     intro:
       'Aplicación de chat propia, monorepo NestJS + Next.js, conectada al pipeline de n8n con base de conocimiento (RAG) sobre modelos de Ollama.',
@@ -200,6 +217,11 @@ export const es: Dictionary = {
     ctaLive: 'Abrir el chat en vivo',
   },
   devAiPage: {
+    meta: {
+      title: 'Cómo desarrollo con IA — Nestor Vargas',
+      description:
+        'Asistentes de código, modelos self-hosted con Ollama y automatización con n8n: así integro IA a mi flujo de trabajo diario sin perder control de la arquitectura.',
+    },
     title: 'Cómo desarrollo con IA',
     intro:
       'La IA no es solo el producto de este servidor — es parte de cómo lo construyo día a día, desde la arquitectura hasta el código y el debugging.',
