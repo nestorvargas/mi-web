@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom';
 import DetailHeader from '../components/DetailHeader';
 import { useLanguage } from '../i18n/LanguageContext';
+import { usePageMeta } from '../hooks/usePageMeta';
 
 export default function N8nPage() {
   const { t } = useLanguage();
   const p = t.n8nPage;
+  usePageMeta(p.meta, '/n8n');
 
   return (
     <section className="detail-page">

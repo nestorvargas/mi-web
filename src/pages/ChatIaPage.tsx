@@ -1,12 +1,14 @@
 import { Link } from 'react-router-dom';
 import DetailHeader from '../components/DetailHeader';
 import { useLanguage } from '../i18n/LanguageContext';
+import { usePageMeta } from '../hooks/usePageMeta';
 
 const stack = ['NestJS', 'Next.js (App Router)', 'n8n', 'Ollama', 'SQLite', 'Docker', 'Coolify'];
 
 export default function ChatIaPage() {
   const { t } = useLanguage();
   const p = t.chatIaPage;
+  usePageMeta(p.meta, '/chat-ia');
 
   return (
     <section className="detail-page">

@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom';
 import DetailHeader from '../components/DetailHeader';
 import { useLanguage } from '../i18n/LanguageContext';
+import { usePageMeta } from '../hooks/usePageMeta';
 
 export default function DesarrolloIaPage() {
   const { t } = useLanguage();
   const p = t.devAiPage;
+  usePageMeta(p.meta, '/desarrollo-ia');
 
   return (
     <section className="detail-page">
