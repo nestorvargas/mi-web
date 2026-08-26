@@ -14,25 +14,31 @@ import { LanguageProvider } from './i18n/LanguageContext';
 
 export default function App() {
   const [chatOpen, setChatOpen] = useState(false);
+  const onOpenChat = () => setChatOpen(true);
 
   return (
-    <LanguageProvider>
-      <BrowserRouter>
+    <BrowserRouter>
+      <LanguageProvider>
         <ScrollToTop />
         <Aurora />
         <Particles />
         <Nav />
         <main>
           <Routes>
-            <Route path="/" element={<Home onOpenChat={() => setChatOpen(true)} />} />
+            <Route path="/" element={<Home onOpenChat={onOpenChat} />} />
             <Route path="/n8n" element={<N8nPage />} />
             <Route path="/chat-ia" element={<ChatIaPage />} />
             <Route path="/desarrollo-ia" element={<DesarrolloIaPage />} />
+
+            <Route path="/en" element={<Home onOpenChat={onOpenChat} />} />
+            <Route path="/en/n8n" element={<N8nPage />} />
+            <Route path="/en/chat-ia" element={<ChatIaPage />} />
+            <Route path="/en/desarrollo-ia" element={<DesarrolloIaPage />} />
           </Routes>
         </main>
         <Footer />
         <ChatWidget isOpen={chatOpen} onToggle={() => setChatOpen((v) => !v)} />
-      </BrowserRouter>
-    </LanguageProvider>
+      </LanguageProvider>
+    </BrowserRouter>
   );
 }
