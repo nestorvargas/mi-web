@@ -258,4 +258,13 @@ export const en: Dictionary = {
     sendAria: 'Send',
     errorMessage: 'There was a connection error. Please try again in a moment.',
   },
+  notFound: {
+    meta: {
+      title: '404 — Page not found | Nestor Vargas',
+      description: "The page you're looking for doesn't exist or has moved.",
+    },
+    heading: 'Page not found',
+    desc: "The page you're looking for doesn't exist or has moved.",
+    cta: 'Back to home',
+  },
 };

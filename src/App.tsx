@@ -10,6 +10,7 @@ import Home from './pages/Home';
 import N8nPage from './pages/N8nPage';
 import ChatIaPage from './pages/ChatIaPage';
 import DesarrolloIaPage from './pages/DesarrolloIaPage';
+import NotFoundPage from './pages/NotFoundPage';
 import { LanguageProvider } from './i18n/LanguageContext';
 
 export default function App() {
@@ -34,6 +35,8 @@ export default function App() {
             <Route path="/en/n8n" element={<N8nPage />} />
             <Route path="/en/chat-ia" element={<ChatIaPage />} />
             <Route path="/en/desarrollo-ia" element={<DesarrolloIaPage />} />
+
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>
         <Footer />

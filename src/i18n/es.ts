@@ -258,4 +258,13 @@ export const es: Dictionary = {
     sendAria: 'Enviar',
     errorMessage: 'Hubo un error de conexión. Intente de nuevo en un momento.',
   },
+  notFound: {
+    meta: {
+      title: '404 — Página no encontrada | Nestor Vargas',
+      description: 'La página que busca no existe o se movió de lugar.',
+    },
+    heading: 'Página no encontrada',
+    desc: 'La página que busca no existe o se movió de lugar.',
+    cta: 'Volver al inicio',
+  },
 };

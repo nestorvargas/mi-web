@@ -1907,6 +1907,53 @@ footer a {
   font-weight: 600;
 }
 
+/* 404 (in-app catch-all) */
+.notfound-page {
+  min-height: calc(100vh - 60px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+}
+
+.notfound-inner {
+  text-align: center;
+  max-width: 420px;
+}
+
+.notfound-inner .logo {
+  margin: 0 auto 1.75rem;
+}
+
+.notfound-code {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(3.5rem, 12vw, 5.5rem);
+  line-height: 1;
+  margin: 0;
+  background: linear-gradient(100deg, var(--text) 20%, var(--accent-b) 40%, var(--accent-a) 50%, var(--text) 70%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.notfound-inner h1 {
+  font-size: 1.15rem;
+  margin: 0.75rem 0 0.5rem;
+  text-align: center;
+  background: none;
+  -webkit-text-fill-color: initial;
+  color: var(--text);
+  animation: none;
+}
+
+.notfound-desc {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin: 0 0 1.75rem;
+}
+
 /* Terminal */
 .term-window {
   max-width: 720px;

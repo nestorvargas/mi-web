@@ -148,4 +148,10 @@ export type Dictionary = {
     sendAria: string;
     errorMessage: string;
   };
+  notFound: {
+    meta: PageMeta;
+    heading: string;
+    desc: string;
+    cta: string;
+  };
 };
