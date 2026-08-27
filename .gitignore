@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# SonarQube scanner cache
+.scannerwork
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

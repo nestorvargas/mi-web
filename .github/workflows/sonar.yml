@@ -1,0 +1,29 @@
+name: SonarQube Analysis
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  sonar:
+    runs-on: [self-hosted, portal]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: SonarQube Scan
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: http://localhost:9000
+        run: |
+          npx --yes @sonar/scan \
+            -Dsonar.projectKey=portal_web \
+            -Dsonar.projectName="Portal Web" \
+            -Dsonar.sources=src \
+            -Dsonar.exclusions="dist/**,node_modules/**"
