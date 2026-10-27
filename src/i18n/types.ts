@@ -147,6 +147,7 @@ export type Dictionary = {
     placeholder: string;
     sendAria: string;
     errorMessage: string;
+    codeRejected: string;
     helpBubble: string[];
     dismissHelpAria: string;
   };

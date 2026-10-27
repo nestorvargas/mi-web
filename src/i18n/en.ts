@@ -257,6 +257,7 @@ export const en: Dictionary = {
     placeholder: 'Type your message...',
     sendAria: 'Send',
     errorMessage: 'There was a connection error. Please try again in a moment.',
+    codeRejected: "For security I can't accept code, HTML tags or commands. Please ask your question in plain words 🙂",
     helpBubble: [
       'Hi! 👋 Can I help you?',
       "Ask me about Nestor's projects",

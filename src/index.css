@@ -2216,6 +2216,19 @@ footer a {
   0%, 100% { transform: rotate(0deg); }
   50% { transform: rotate(8deg); }
 }
+/* Greeting a visitor on arrival (useRoaming intro): big friendly wave with a little bounce. */
+.bot-mascot .bot-wave-arm {
+  transform-origin: 79px 97px;
+  animation: bot-hello 0.8s ease-in-out infinite;
+}
+.bot-mascot.pose-wave .bot-float {
+  animation: bot-step 0.8s ease-in-out infinite;
+  --lean: 0deg;
+}
+@keyframes bot-hello {
+  0%, 100% { transform: rotate(8deg); }
+  50% { transform: rotate(-14deg); }
+}
 @keyframes bot-wave {
   0%, 100% { transform: rotate(0deg); }
   25% { transform: rotate(-70deg); }

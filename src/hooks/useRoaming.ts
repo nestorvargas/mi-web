@@ -13,6 +13,8 @@ const LAUNCHER_CLEARANCE = 96;
 // #chat-roamer sits this far above the viewport bottom.
 const FLOOR = 8;
 const FIRST_MOVE_DELAY_MS = 2500;
+// How long it waves at a visitor after coming out on page load.
+const WAVE_MS = 3200;
 const MIN_STEP_PX = 120;
 const HOP_MS = 550;
 // Climbs taller than this go up a ladder it puts up; smaller ones are a hop.
@@ -52,11 +54,12 @@ export type Pose =
   | 'juggle'
   | 'header'
   | 'climb'
+  | 'wave'
   | 'hidden'
   | 'peek';
 
 // Drives the walking robot (the whole site is its home). It starts ducked
-// below the floor by the chat launcher, peeks out and walks off along the
+// below the floor by the chat launcher, peeks out, waves hello and walks off along the
 // bottom of the viewport. When it stops it may juggle letters pulled out of
 // the hero title; sometimes it hops up next to a logo/heading and pushes it
 // (or plays "21" with the hero logo and drops it on the title). hide() sends
@@ -426,6 +429,12 @@ export function useRoaming(enabled: boolean, width: number) {
         setPose('hop');
         await setY(0, HOP_MS, signal);
         introRef.current = false;
+        // Step out from behind the chat launcher, face the visitor and say hi
+        // (the help bubble's first hint is the greeting).
+        await walkTo(Math.max(roamMin(), window.innerWidth - width - LAUNCHER_CLEARANCE), WALK_SPEED, signal);
+        setFacing('left');
+        setPose('wave');
+        await wait(WAVE_MS, signal);
         setPose('idle');
       } else {
         await wait(FIRST_MOVE_DELAY_MS, signal);

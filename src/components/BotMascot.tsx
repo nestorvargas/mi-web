@@ -96,10 +96,18 @@ export default function BotMascot({
                   <line x1="41" y1="97" x2="28" y2="108" stroke="#0e7490" strokeWidth="5" strokeLinecap="round" />
                   <circle cx="26" cy="110" r="5.5" fill="#2dd4bf" />
                 </g>
-                <g className="bot-arm-r">
-                  <line x1="79" y1="97" x2="92" y2="108" stroke="#0e7490" strokeWidth="5" strokeLinecap="round" />
-                  <circle cx="94" cy="110" r="5.5" fill="#2dd4bf" />
-                </g>
+                {pose === 'wave' ? (
+                  // Raised outside its head so the hello is visible (the normal arm would hide behind it).
+                  <g className="bot-wave-arm">
+                    <path d="M79 97 Q104 96 108 62" fill="none" stroke="#0e7490" strokeWidth="5" strokeLinecap="round" />
+                    <circle cx="108" cy="58" r="6" fill="#2dd4bf" />
+                  </g>
+                ) : (
+                  <g className="bot-arm-r">
+                    <line x1="79" y1="97" x2="92" y2="108" stroke="#0e7490" strokeWidth="5" strokeLinecap="round" />
+                    <circle cx="94" cy="110" r="5.5" fill="#2dd4bf" />
+                  </g>
+                )}
               </>
               )
             )}

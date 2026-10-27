@@ -4,6 +4,7 @@ import { useLanguage } from '../i18n/LanguageContext';
 import BotAtDesk from './BotAtDesk';
 import BotMascot from './BotMascot';
 import { useRoaming } from '../hooks/useRoaming';
+import { isSafeHref, looksLikeCode, MAX_MESSAGE_LENGTH } from './chatGuard';
 
 const API_URL = 'https://chat.nestordevelop.online/api/chat';
 
@@ -78,7 +79,9 @@ function getOrCreateSessionId(): string {
   return id;
 }
 
-type Message = { role: 'user' | 'assistant'; content: string };
+// `local` messages (notices and errors shown by the widget itself) are
+// displayed but never sent back to the bot as history.
+type Message = { role: 'user' | 'assistant'; content: string; local?: boolean };
 
 // Minimal markdown renderer for what the model actually produces: **bold**,
 // "- " / "1. " lists, and paragraphs. Avoids pulling in react-markdown for
@@ -90,6 +93,7 @@ function renderInline(text: string): ReactNode[] {
       return <strong key={i}>{part.slice(2, -2)}</strong>;
     }
     const link = /^\[([^\]]+)\]\(([^)]+)\)$/.exec(part);
+    if (link && !isSafeHref(link[2])) return <Fragment key={i}>{link[1]}</Fragment>;
     if (link) {
       return (
         <a key={i} href={link[2]} target="_blank" rel="noopener noreferrer">
@@ -242,6 +246,13 @@ export default function ChatWidget({ isOpen, onToggle }: Props) {
     const text = overrideText ?? input.trim();
     if (!text || loading) return;
 
+    // Code, markup or commands never leave the browser (the backend rejects
+    // them too); the text stays in the input so it can be rephrased.
+    if (looksLikeCode(text) || text.length > MAX_MESSAGE_LENGTH) {
+      setHistory((prev) => [...prev, { role: 'assistant', content: t.chatWidget.codeRejected, local: true }]);
+      return;
+    }
+
     if (!sessionIdRef.current) {
       sessionIdRef.current = getOrCreateSessionId();
     }
@@ -256,13 +267,22 @@ export default function ChatWidget({ isOpen, onToggle }: Props) {
       const res = await fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: nextHistory, sessionId: sessionIdRef.current }),
+        body: JSON.stringify({
+          messages: nextHistory.filter((m) => !m.local).map(({ role, content }) => ({ role, content })),
+          sessionId: sessionIdRef.current,
+        }),
       });
+      // Rejected by the backend's guard: drop the message from the history
+      // (it would get every later request rejected too) and say why.
+      if (res.status === 400) {
+        setHistory([...history, { role: 'assistant', content: t.chatWidget.codeRejected, local: true }]);
+        return;
+      }
       if (!res.ok) throw new Error(`Error ${res.status}`);
       const data = await res.json();
       setHistory((prev) => [...prev, { role: 'assistant', content: data.response ?? '' }]);
     } catch {
-      setHistory((prev) => [...prev, { role: 'assistant', content: t.chatWidget.errorMessage }]);
+      setHistory((prev) => [...prev, { role: 'assistant', content: t.chatWidget.errorMessage, local: true }]);
     } finally {
       setLoading(false);
       if (!isMobileViewport()) inputRef.current?.focus();
@@ -276,7 +296,11 @@ export default function ChatWidget({ isOpen, onToggle }: Props) {
 
   // Only while it's wandering around, not mid-prank or while hiding from the visitor.
   const showHelp =
-    helpVisible && !helpDismissed && !isOpen && !roamer.aloft && (roamer.pose === 'idle' || roamer.pose === 'walk');
+    helpVisible &&
+    !helpDismissed &&
+    !isOpen &&
+    !roamer.aloft &&
+    (roamer.pose === 'idle' || roamer.pose === 'walk' || roamer.pose === 'wave');
 
   // Next hint once the current one has been typed out and left up to read.
   useEffect(() => {
@@ -442,6 +466,7 @@ export default function ChatWidget({ isOpen, onToggle }: Props) {
             rows={1}
             placeholder={t.chatWidget.placeholder}
             value={input}
+            maxLength={MAX_MESSAGE_LENGTH}
             onChange={handleInput}
             onKeyDown={handleKeyDown}
             disabled={loading}

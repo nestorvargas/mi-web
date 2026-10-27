@@ -257,6 +257,8 @@ export const es: Dictionary = {
     placeholder: 'Escriba su mensaje...',
     sendAria: 'Enviar',
     errorMessage: 'Hubo un error de conexión. Intente de nuevo en un momento.',
+    codeRejected:
+      'Por seguridad no puedo recibir código, etiquetas HTML ni comandos. Escríbame su pregunta con palabras 🙂',
     helpBubble: [
       '¡Hola! 👋 ¿Le ayudo en algo?',
       'Pregúnteme por los proyectos de Nestor',
