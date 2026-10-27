@@ -147,6 +147,8 @@ export type Dictionary = {
     placeholder: string;
     sendAria: string;
     errorMessage: string;
+    helpBubble: string[];
+    dismissHelpAria: string;
   };
   notFound: {
     meta: PageMeta;

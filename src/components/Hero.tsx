@@ -1,4 +1,5 @@
 import { useLanguage } from '../i18n/LanguageContext';
+import HeroHome, { HeroLamp } from './HeroHome';
 
 type Props = {
   onOpenChat: () => void;
@@ -10,7 +11,9 @@ export default function Hero({ onOpenChat }: Props) {
   return (
     <section className="hero" id="hero">
       <div className="hero-glow" aria-hidden="true" />
+      <HeroHome />
       <div className="brand">
+        <HeroLamp />
         <div className="logo">
           <span>IA</span>
           <span className="logo-divider" />

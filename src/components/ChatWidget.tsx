@@ -1,6 +1,9 @@
 import { Fragment, useEffect, useRef, useState } from 'react';
-import type { ChangeEvent, FormEvent, KeyboardEvent, ReactNode } from 'react';
+import type { ChangeEvent, CSSProperties, FormEvent, KeyboardEvent, ReactNode } from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
+import BotAtDesk from './BotAtDesk';
+import BotMascot from './BotMascot';
+import { useRoaming } from '../hooks/useRoaming';
 
 const API_URL = 'https://chat.nestordevelop.online/api/chat';
 
@@ -24,6 +27,12 @@ function createId() {
 }
 
 const SESSION_ID_KEY = 'chat_session_id';
+const HELP_DISMISSED_KEY = 'chat_help_dismissed';
+const HELP_DELAY_MS = 1500;
+const HELP_ROTATE_MS = 4500;
+// The walking robot shrinks on phones so it doesn't cover half the screen.
+const ROAMER_WIDTH = 100;
+const ROAMER_WIDTH_MOBILE = 76;
 
 function getOrCreateSessionId(): string {
   const stored = window.localStorage.getItem(SESSION_ID_KEY);
@@ -130,6 +139,45 @@ export default function ChatWidget({ isOpen, onToggle }: Props) {
   const messagesRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const sessionIdRef = useRef<string>('');
+  const [mobile, setMobile] = useState(isMobileViewport);
+  useEffect(() => {
+    const mq = window.matchMedia(MOBILE_QUERY);
+    const onChange = () => setMobile(mq.matches);
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
+  const roamerWidth = mobile ? ROAMER_WIDTH_MOBILE : ROAMER_WIDTH;
+  const roamer = useRoaming(!isOpen, roamerWidth);
+  const [helpVisible, setHelpVisible] = useState(false);
+  const [helpIndex, setHelpIndex] = useState(0);
+  const [helpDismissed, setHelpDismissed] = useState(
+    () => window.sessionStorage.getItem(HELP_DISMISSED_KEY) === '1',
+  );
+
+  // Floating "I can help" bubble next to the launcher: shows shortly after
+  // load and cycles through hints until the visitor opens the chat or closes it.
+  useEffect(() => {
+    if (helpDismissed) return;
+    const show = window.setTimeout(() => setHelpVisible(true), HELP_DELAY_MS);
+    const rotate = window.setInterval(
+      () => setHelpIndex((i) => (i + 1) % t.chatWidget.helpBubble.length),
+      HELP_ROTATE_MS,
+    );
+    return () => {
+      window.clearTimeout(show);
+      window.clearInterval(rotate);
+    };
+  }, [helpDismissed, t.chatWidget.helpBubble.length]);
+
+  function dismissHelp() {
+    setHelpDismissed(true);
+    window.sessionStorage.setItem(HELP_DISMISSED_KEY, '1');
+  }
+
+  function handleToggle() {
+    if (!isOpen) dismissHelp();
+    onToggle();
+  }
 
   useEffect(() => {
     if (isOpen && !isMobileViewport()) inputRef.current?.focus();
@@ -195,6 +243,10 @@ export default function ChatWidget({ isOpen, onToggle }: Props) {
     sendMessage();
   }
 
+  // Only while it's wandering around, not mid-prank or while hiding from the visitor.
+  const showHelp =
+    helpVisible && !helpDismissed && !isOpen && !roamer.aloft && (roamer.pose === 'idle' || roamer.pose === 'walk');
+
   return (
     <>
       <button
@@ -202,15 +254,61 @@ export default function ChatWidget({ isOpen, onToggle }: Props) {
         type="button"
         aria-label={isOpen ? t.chatWidget.closeAria : t.chatWidget.openAria}
         className={isOpen ? 'open' : undefined}
-        onClick={onToggle}
+        onClick={handleToggle}
       >
         <i className="fa-solid fa-comment-dots icon-chat" />
         <i className="fa-solid fa-xmark icon-close" />
       </button>
 
+      {/* The floor the robot walks on along the bottom of the page */}
+      <div className="bot-floor" aria-hidden="true" />
+
+      {!isOpen && (
+        <div
+          id="chat-roamer"
+          ref={roamer.outerRef}
+          style={{ '--roam-w': `${roamerWidth}px` } as CSSProperties}
+          className={[
+            `facing-${roamer.facing}`,
+            `bubble-${roamer.side === 'left' ? 'right' : 'left'}`,
+          ]
+            .filter(Boolean)
+            .join(' ')}
+        >
+          <div className="chat-roamer-body" ref={roamer.innerRef}>
+            {roamer.pose === 'kick' && (
+              <div className="bot-count" key={roamer.count} aria-hidden="true">
+                {roamer.count}
+              </div>
+            )}
+            {showHelp && (
+              <div id="chat-help-bubble" role="status">
+                <button type="button" className="chat-help-text" onClick={handleToggle}>
+                  <span key={helpIndex}>{t.chatWidget.helpBubble[helpIndex]}</span>
+                </button>
+                <button
+                  type="button"
+                  className="chat-help-dismiss"
+                  aria-label={t.chatWidget.dismissHelpAria}
+                  onClick={dismissHelp}
+                >
+                  <i className="fa-solid fa-xmark" />
+                </button>
+              </div>
+            )}
+            {/* Purely playful: clicking the robot makes it run off and hide, not open the chat. */}
+            <button id="chat-bot" type="button" aria-hidden="true" tabIndex={-1} onClick={roamer.hide}>
+              <BotMascot size={roamerWidth * 0.92} pose={roamer.pose} holding={roamer.carrying} />
+            </button>
+          </div>
+        </div>
+      )}
+
       <div id="chat-panel" className={isOpen ? 'open' : undefined}>
         <div className="chat-header">
-          <div className="logo">IA</div>
+          <div className="chat-header-bot">
+            <BotMascot size={34} compact />
+          </div>
           <div>
             <div className="title">{t.chatWidget.title}</div>
             <div className="status">
@@ -231,7 +329,7 @@ export default function ChatWidget({ isOpen, onToggle }: Props) {
         <div id="chat-messages" ref={messagesRef}>
           {history.length === 0 && (
             <div id="chat-empty-state">
-              <div className="chat-empty-icon">IA</div>
+              <BotAtDesk size={150} busy={loading} className="chat-empty-bot" />
               <p className="chat-empty-title">{t.chatWidget.emptyTitle}</p>
               <p className="chat-empty-subtitle">{t.chatWidget.emptySubtitle}</p>
               <div className="chat-suggested-prompts">
@@ -251,14 +349,18 @@ export default function ChatWidget({ isOpen, onToggle }: Props) {
           {history.map((m, i) => (
             <div key={i} className={`msg-row ${m.role === 'user' ? 'user' : 'bot'}`}>
               <div className={`msg-avatar ${m.role === 'user' ? 'user' : 'bot'}`}>
-                {m.role === 'user' ? <i className="fa-solid fa-user" style={{ fontSize: 11 }} /> : 'IA'}
+                {m.role === 'user' ? (
+                  <i className="fa-solid fa-user" style={{ fontSize: 11 }} />
+                ) : (
+                  <BotMascot size={26} compact animated={false} />
+                )}
               </div>
               <div className="msg-bubble">{m.role === 'user' ? m.content : renderMarkdown(m.content)}</div>
             </div>
           ))}
           {loading && (
-            <div className="msg-row bot">
-              <div className="msg-avatar bot">IA</div>
+            <div className="msg-row bot chat-typing-row">
+              <BotAtDesk size={76} busy />
               <div className="msg-bubble">
                 <div className="typing-dots">
                   <span />

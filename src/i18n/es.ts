@@ -17,7 +17,7 @@ export const es: Dictionary = {
     about: 'Sobre mí',
   },
   hero: {
-    title: 'Desarrollador Web Full Stack - IA — Nestor Vargas',
+    title: 'Desarrollador Web Full Stack - IA Nestor Vargas',
     subtitle:
       'Desarrollo de aplicaciones web con tecnologías modernas y prácticas, integrando inteligencia artificial en soluciones digitales',
     ctaChat: 'Probar el chat',
@@ -257,6 +257,13 @@ export const es: Dictionary = {
     placeholder: 'Escriba su mensaje...',
     sendAria: 'Enviar',
     errorMessage: 'Hubo un error de conexión. Intente de nuevo en un momento.',
+    helpBubble: [
+      '¡Hola! 👋 ¿Le ayudo en algo?',
+      'Pregúnteme por los proyectos de Nestor',
+      '¿Busca un desarrollador? Le cuento todo',
+      'Respondo al instante, cuando quiera',
+    ],
+    dismissHelpAria: 'Ocultar mensaje',
   },
   notFound: {
     meta: {

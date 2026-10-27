@@ -17,7 +17,7 @@ export const en: Dictionary = {
     about: 'About me',
   },
   hero: {
-    title: 'Full Stack Web Developer - AI — Nestor Vargas',
+    title: 'Full Stack Web Developer - AI Nestor Vargas',
     subtitle:
       'Building web applications with modern, practical technologies, integrating artificial intelligence into digital products',
     ctaChat: 'Try the chat',
@@ -257,6 +257,13 @@ export const en: Dictionary = {
     placeholder: 'Type your message...',
     sendAria: 'Send',
     errorMessage: 'There was a connection error. Please try again in a moment.',
+    helpBubble: [
+      'Hi! 👋 Can I help you?',
+      "Ask me about Nestor's projects",
+      'Looking for a developer? I can tell you all about him',
+      'I answer instantly, anytime',
+    ],
+    dismissHelpAria: 'Hide message',
   },
   notFound: {
     meta: {
