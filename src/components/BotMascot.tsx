@@ -10,6 +10,8 @@ type Props = {
   // Hugging the hero plant (useRoaming's carryPlant): drawn in front of the
   // body with the arms wrapped around the pot.
   holding?: boolean;
+  // Saying something (the help bubble typing out): the mouth moves.
+  talking?: boolean;
   className?: string;
 };
 
@@ -19,6 +21,7 @@ export default function BotMascot({
   animated = true,
   pose,
   holding = false,
+  talking = false,
   className,
 }: Props) {
   // Gradient ids must be unique per instance: several mascots render at once
@@ -29,7 +32,7 @@ export default function BotMascot({
   const glow = `bot-glow-${uid}`;
 
   const viewBox = compact ? '15 2 90 90' : '0 0 120 130';
-  const classes = ['bot-mascot', animated && 'is-animated', pose && `pose-${pose}`, className].filter(Boolean).join(' ');
+  const classes = ['bot-mascot', animated && 'is-animated', pose && `pose-${pose}`, talking && 'is-talking', className].filter(Boolean).join(' ');
 
   return (
     <svg
@@ -73,7 +76,21 @@ export default function BotMascot({
               <rect x="46" y="103" width="8" height="17" rx="3.5" fill="#0e7490" />
               <rect x="42" y="117" width="14" height="6" rx="3" fill="#2dd4bf" />
             </g>
-            {!holding && (
+            {pose === 'climb' ? (
+              <>
+                {/* Reaching up past its head to grip the ladder rails (createLadder's
+                    railHalf puts them at x 13 / 107 here); hands take turns climbing. */}
+                <g className="bot-climb-arm bot-climb-arm-l">
+                  <path d="M41 97 Q14 94 13 52" fill="none" stroke="#0e7490" strokeWidth="5" strokeLinecap="round" />
+                  <circle cx="13" cy="50" r="5.5" fill="#2dd4bf" />
+                </g>
+                <g className="bot-climb-arm bot-climb-arm-r">
+                  <path d="M79 97 Q106 94 107 52" fill="none" stroke="#0e7490" strokeWidth="5" strokeLinecap="round" />
+                  <circle cx="107" cy="50" r="5.5" fill="#2dd4bf" />
+                </g>
+              </>
+            ) : (
+              !holding && (
               <>
                 <g className="bot-arm-l">
                   <line x1="41" y1="97" x2="28" y2="108" stroke="#0e7490" strokeWidth="5" strokeLinecap="round" />
@@ -84,6 +101,7 @@ export default function BotMascot({
                   <circle cx="94" cy="110" r="5.5" fill="#2dd4bf" />
                 </g>
               </>
+              )
             )}
             <rect x="53" y="85" width="14" height="7" rx="2" fill="#0e7490" />
             <rect x="40" y="90" width="40" height="24" rx="10" fill={`url(#${shell})`} />
@@ -109,6 +127,7 @@ export default function BotMascot({
           <rect x="68" y="49" width="9" height="12" rx="4.5" fill="#5eead4" />
         </g>
         <path
+          className="bot-mouth"
           d="M52 66 Q60 72 68 66"
           fill="none"
           stroke="#5eead4"

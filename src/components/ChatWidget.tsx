@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useRef, useState } from 'react';
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import type { ChangeEvent, CSSProperties, FormEvent, KeyboardEvent, ReactNode } from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
 import BotAtDesk from './BotAtDesk';
@@ -29,10 +29,46 @@ function createId() {
 const SESSION_ID_KEY = 'chat_session_id';
 const HELP_DISMISSED_KEY = 'chat_help_dismissed';
 const HELP_DELAY_MS = 1500;
-const HELP_ROTATE_MS = 4500;
+// How long a fully typed help message stays up before the next one starts.
+const HELP_READ_MS = 3500;
+const HELP_TYPE_MS = 32;
 // The walking robot shrinks on phones so it doesn't cover half the screen.
 const ROAMER_WIDTH = 100;
 const ROAMER_WIDTH_MOBILE = 76;
+
+// Types the help bubble's text out a character at a time, as if the robot
+// were saying it (it moves its mouth while onTalking is true). The full text
+// is laid out invisibly underneath so the bubble keeps its final size, and is
+// what screen readers get. Keyed by message so each one starts over.
+function TypedText({ text, onTalking }: { text: string; onTalking: (talking: boolean) => void }) {
+  const chars = Array.from(text);
+  const [shown, setShown] = useState(() =>
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches ? chars.length : 0,
+  );
+  const typing = shown < chars.length;
+
+  useEffect(() => {
+    if (!typing) return;
+    const id = window.setTimeout(() => setShown((n) => n + 1), HELP_TYPE_MS);
+    return () => window.clearTimeout(id);
+  }, [shown, typing]);
+
+  useEffect(() => onTalking(typing), [typing, onTalking]);
+  useEffect(() => () => onTalking(false), [onTalking]);
+
+  return (
+    <span className="chat-help-line">
+      <span className="chat-help-sizer" aria-hidden="true">
+        {text}
+      </span>
+      <span className="chat-help-typed" aria-hidden="true">
+        {chars.slice(0, shown).join('')}
+        {typing && <i className="chat-help-caret" />}
+      </span>
+      <span className="visually-hidden">{text}</span>
+    </span>
+  );
+}
 
 function getOrCreateSessionId(): string {
   const stored = window.localStorage.getItem(SESSION_ID_KEY);
@@ -150,24 +186,19 @@ export default function ChatWidget({ isOpen, onToggle }: Props) {
   const roamer = useRoaming(!isOpen, roamerWidth);
   const [helpVisible, setHelpVisible] = useState(false);
   const [helpIndex, setHelpIndex] = useState(0);
+  const [talking, setTalking] = useState(false);
+  const onTalking = useCallback((value: boolean) => setTalking(value), []);
   const [helpDismissed, setHelpDismissed] = useState(
     () => window.sessionStorage.getItem(HELP_DISMISSED_KEY) === '1',
   );
 
-  // Floating "I can help" bubble next to the launcher: shows shortly after
-  // load and cycles through hints until the visitor opens the chat or closes it.
+  // Floating "I can help" bubble by the robot: shows shortly after load and
+  // cycles through hints until the visitor opens the chat or closes it.
   useEffect(() => {
     if (helpDismissed) return;
     const show = window.setTimeout(() => setHelpVisible(true), HELP_DELAY_MS);
-    const rotate = window.setInterval(
-      () => setHelpIndex((i) => (i + 1) % t.chatWidget.helpBubble.length),
-      HELP_ROTATE_MS,
-    );
-    return () => {
-      window.clearTimeout(show);
-      window.clearInterval(rotate);
-    };
-  }, [helpDismissed, t.chatWidget.helpBubble.length]);
+    return () => window.clearTimeout(show);
+  }, [helpDismissed]);
 
   function dismissHelp() {
     setHelpDismissed(true);
@@ -247,6 +278,16 @@ export default function ChatWidget({ isOpen, onToggle }: Props) {
   const showHelp =
     helpVisible && !helpDismissed && !isOpen && !roamer.aloft && (roamer.pose === 'idle' || roamer.pose === 'walk');
 
+  // Next hint once the current one has been typed out and left up to read.
+  useEffect(() => {
+    if (!showHelp || talking) return;
+    const id = window.setTimeout(
+      () => setHelpIndex((i) => (i + 1) % t.chatWidget.helpBubble.length),
+      HELP_READ_MS,
+    );
+    return () => window.clearTimeout(id);
+  }, [showHelp, talking, helpIndex, t.chatWidget.helpBubble.length]);
+
   return (
     <>
       <button
@@ -284,7 +325,11 @@ export default function ChatWidget({ isOpen, onToggle }: Props) {
             {showHelp && (
               <div id="chat-help-bubble" role="status">
                 <button type="button" className="chat-help-text" onClick={handleToggle}>
-                  <span key={helpIndex}>{t.chatWidget.helpBubble[helpIndex]}</span>
+                  <span className="chat-help-eyebrow" aria-hidden="true">
+                    <span className="dot" />
+                    {t.chatWidget.title}
+                  </span>
+                  <TypedText key={helpIndex} text={t.chatWidget.helpBubble[helpIndex]} onTalking={onTalking} />
                 </button>
                 <button
                   type="button"
@@ -298,7 +343,12 @@ export default function ChatWidget({ isOpen, onToggle }: Props) {
             )}
             {/* Purely playful: clicking the robot makes it run off and hide, not open the chat. */}
             <button id="chat-bot" type="button" aria-hidden="true" tabIndex={-1} onClick={roamer.hide}>
-              <BotMascot size={roamerWidth * 0.92} pose={roamer.pose} holding={roamer.carrying} />
+              <BotMascot
+                size={roamerWidth * 0.92}
+                pose={roamer.pose}
+                holding={roamer.carrying}
+                talking={showHelp && talking}
+              />
             </button>
           </div>
         </div>

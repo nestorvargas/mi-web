@@ -424,7 +424,8 @@ export type Ladder = {
 export function createLadder(foot: number, rise: number, floor: number, robotWidth: number): Ladder {
   const rungs = Math.max(3, Math.round(rise / STEP_RISE));
   const rungH = rise / rungs;
-  const railHalf = robotWidth * 0.3;
+  // Rails where BotMascot's climbing hands grip them (svg x 13 / 107 of 120 at 0.92 scale).
+  const railHalf = robotWidth * 0.36;
   const platformW = robotWidth * 0.75;
   const pad = platformW / 2 + 6;
   const left = foot - pad;
