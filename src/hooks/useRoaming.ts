@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { Aborted, between, createLadder, keepyUppy, knock, measure, playTitleLetters, wait } from './botPranks';
-import type { Ladder, LetterGame } from './botPranks';
+import { Aborted, between, keepyUppy, knock, measure, playTitleLetters, wait } from './botPranks';
+import type { LetterGame } from './botPranks';
 
 // Walk speed is tuned to the leg swing in index.css (0.6s cycle) so the feet
 // don't look like they're sliding on ice.
@@ -17,9 +17,6 @@ const FIRST_MOVE_DELAY_MS = 2500;
 const WAVE_MS = 3200;
 const MIN_STEP_PX = 120;
 const HOP_MS = 550;
-// Climbs taller than this go up a ladder it puts up; smaller ones are a hop.
-const LADDER_MIN_RISE = 90;
-const STEP_MS = 330;
 const PRANK_CHANCE = 0.35;
 // After stopping somewhere, how often it pulls letters out of the hero title to play.
 const LETTER_GAME_CHANCE = 0.5;
@@ -53,7 +50,6 @@ export type Pose =
   | 'cheer'
   | 'juggle'
   | 'header'
-  | 'climb'
   | 'wave'
   | 'hidden'
   | 'peek';
@@ -80,7 +76,7 @@ export function useRoaming(enabled: boolean, width: number) {
   const [count, setCount] = useState(0);
   // Hugging the hero plant (BotMascot draws it in its arms).
   const [carrying, setCarrying] = useState(false);
-  // Up off the floor (on its ladder or next to a logo): the help bubble waits.
+  // Up off the floor (next to a logo or heading): the help bubble waits.
   const [aloft, setAloft] = useState(false);
 
   // First appearance of the page: it starts ducked below the floor.
@@ -161,88 +157,24 @@ export function useRoaming(enabled: boolean, width: number) {
       });
 
     let knockAnim: Animation | null = null;
-    let ladder: Ladder | null = null;
-    let ladderRise = 0;
-
-    const smooth = (t: number) => t * t * (3 - 2 * t);
-
-    // Climbs the ladder one rung at a time (hands and feet in turn, the body
-    // lifting early in each step), writing y directly.
-    const climb = (upward: boolean, signal: AbortSignal) =>
-      new Promise<void>((resolve, reject) => {
-        if (!ladder) return resolve();
-        const rungs = ladder.rungs;
-        const rungH = ladderRise / rungs;
-        setPose('climb');
-        inner.style.transition = 'none';
-        let start = 0;
-        let raf = 0;
-        const frame = (now: number) => {
-          if (!start) start = now;
-          const p = Math.min((now - start) / (rungs * STEP_MS), 1);
-          const t = (upward ? p : 1 - p) * rungs;
-          const k = Math.min(Math.floor(t), rungs);
-          const lift = k === rungs ? rungs : k + smooth(Math.min(1, (t - k) * 2));
-          yRef.current = -lift * rungH;
-          inner.style.transform = `translateY(${yRef.current}px)`;
-          if (p >= 1) return resolve();
-          raf = requestAnimationFrame(frame);
-        };
-        raf = requestAnimationFrame(frame);
-        signal.addEventListener(
-          'abort',
-          () => {
-            cancelAnimationFrame(raf);
-            reject(new Aborted());
-          },
-          { once: true },
-        );
-      });
-
-    // Gets it up to stand at standX with its feet `rise` px above the floor,
-    // facing the target: a hop for small rises, otherwise it walks there, puts
-    // up a ladder and climbs it. Returns false if the target moved (page
+    // Walks to standX and hops up so its feet are level with the target's
+    // bottom edge, facing it. Returns false if the target moved (page
     // scrolled) before it got there.
     const goUp = async (standX: number, getBottom: () => number, faceRight: boolean, signal: AbortSignal) => {
       const bottom0 = getBottom();
       await walkTo(standX, WALK_SPEED, signal);
       const bottom = getBottom();
       if (Math.abs(bottom - bottom0) > 4) return false;
-      const rise = window.innerHeight - FLOOR - bottom;
       setAloft(true);
-      if (rise < LADDER_MIN_RISE) {
-        setFacing(faceRight ? 'right' : 'left');
-        setPose('hop');
-        await setY(-rise, HOP_MS, signal);
-        return true;
-      }
-      ladder = createLadder(standX + width / 2, rise, FLOOR, width);
-      ladderRise = rise;
-      setPose('idle');
-      await ladder.build(signal);
-      await climb(true, signal);
       setFacing(faceRight ? 'right' : 'left');
-      setPose('idle');
+      setPose('hop');
+      await setY(-(window.innerHeight - FLOOR - bottom), HOP_MS, signal);
       return true;
     };
 
     const goDown = async (signal: AbortSignal) => {
-      if (!ladder) {
-        setPose('hop');
-        await setY(0, HOP_MS, signal);
-        setAloft(false);
-        return;
-      }
-      await climb(false, signal);
-      setAloft(false);
-      setPose('idle');
-      await ladder.dismantle(signal);
-      dropLadder();
-    };
-
-    const dropLadder = () => {
-      ladder?.remove();
-      ladder = null;
+      setPose('hop');
+      await setY(0, HOP_MS, signal);
       setAloft(false);
     };
 
@@ -461,10 +393,10 @@ export function useRoaming(enabled: boolean, width: number) {
     const hideAndPeek = async (signal: AbortSignal) => {
       knockAnim?.cancel();
       knockAnim = null;
-      // Clicked while up on a logo: jump straight down (the ladder vanishes).
+      // Clicked while up on a logo: jump straight down.
       // Clicked while already ducked/peeking: stay low and just duck again.
-      dropLadder();
       if (yRef.current < 0) await setY(0, 250, signal);
+      setAloft(false);
       await walkTo(hideX(), RUN_SPEED, signal, 'run');
       setFacing('left');
       setPose('hidden');
@@ -505,7 +437,7 @@ export function useRoaming(enabled: boolean, width: number) {
     return () => {
       ctrl.abort();
       knockAnim?.cancel();
-      dropLadder();
+      setAloft(false);
       setCarrying(false);
       hideRef.current = () => {};
       window.removeEventListener('resize', onResize);

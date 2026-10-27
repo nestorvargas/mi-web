@@ -76,21 +76,7 @@ export default function BotMascot({
               <rect x="46" y="103" width="8" height="17" rx="3.5" fill="#0e7490" />
               <rect x="42" y="117" width="14" height="6" rx="3" fill="#2dd4bf" />
             </g>
-            {pose === 'climb' ? (
-              <>
-                {/* Reaching up past its head to grip the ladder rails (createLadder's
-                    railHalf puts them at x 13 / 107 here); hands take turns climbing. */}
-                <g className="bot-climb-arm bot-climb-arm-l">
-                  <path d="M41 97 Q14 94 13 52" fill="none" stroke="#0e7490" strokeWidth="5" strokeLinecap="round" />
-                  <circle cx="13" cy="50" r="5.5" fill="#2dd4bf" />
-                </g>
-                <g className="bot-climb-arm bot-climb-arm-r">
-                  <path d="M79 97 Q106 94 107 52" fill="none" stroke="#0e7490" strokeWidth="5" strokeLinecap="round" />
-                  <circle cx="107" cy="50" r="5.5" fill="#2dd4bf" />
-                </g>
-              </>
-            ) : (
-              !holding && (
+            {!holding && (
               <>
                 <g className="bot-arm-l">
                   <line x1="41" y1="97" x2="28" y2="108" stroke="#0e7490" strokeWidth="5" strokeLinecap="round" />
@@ -109,7 +95,6 @@ export default function BotMascot({
                   </g>
                 )}
               </>
-              )
             )}
             <rect x="53" y="85" width="14" height="7" rx="2" fill="#0e7490" />
             <rect x="40" y="90" width="40" height="24" rx="10" fill={`url(#${shell})`} />

@@ -2096,30 +2096,6 @@ footer a {
   50% { transform: rotate(-12deg) translateX(-0.8px); }
 }
 
-/* Climbing a ladder (useRoaming climb): hands on the rails take turns
-   reaching up while the feet step up in turn, two rungs per cycle
-   (STEP_MS 330 x 2). */
-.bot-mascot.pose-climb .bot-climb-arm-l {
-  animation: bot-climb-hand 0.66s ease-in-out infinite;
-}
-.bot-mascot.pose-climb .bot-climb-arm-r {
-  animation: bot-climb-hand 0.66s ease-in-out -0.33s infinite;
-}
-.bot-mascot.pose-climb .bot-leg-l {
-  animation: bot-climb-leg 0.66s ease-in-out -0.33s infinite;
-}
-.bot-mascot.pose-climb .bot-leg-r {
-  animation: bot-climb-leg 0.66s ease-in-out infinite;
-}
-@keyframes bot-climb-hand {
-  0%, 100% { transform: translateY(6px); }
-  50% { transform: translateY(-10px); }
-}
-@keyframes bot-climb-leg {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-5px); }
-}
-
 /* "21" with the hero logo: front leg (bot-leg-l, front either way thanks to
    the mirroring) kicks once per bounce — 0.42s matches BOUNCE_MS in botPranks.ts. */
 .bot-mascot.pose-kick .bot-leg-l {
